@@ -26,7 +26,7 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Container class="com.netnet.netflixlike.components.Curved_Panel" name="curved_Panel1">
+    <Container class="com.netnet.moviedex.components.Curved_Panel" name="curved_Panel1">
 
       <Layout>
         <DimensionLayout dim="0">

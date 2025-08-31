@@ -9,12 +9,8 @@ import com.netnet.moviedex.Movie;
 import com.netnet.moviedex.Movie.MovieStatus;
 import com.netnet.moviedex.User;
 import com.netnet.moviedex.UserData;
-import java.awt.Component;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.HashMap;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+
 
 
 /**
@@ -70,26 +66,17 @@ public class previewFrame extends javax.swing.JFrame {
             map.put(users[i].getName(), userData[i]);
         }
         
-        
-        
         UserCard[] userCards = new UserCard[users.length];
         
-        
-        
-     
         for(int i = 0; i < userCards.length; i++){
             userCards[i] = new UserCard(userData[i]);
-            
-              
+     
         }
-        
         
         Login loginPage = new Login(userCards);
         landingPage1 = new LandingPage(map.get("Guil"));
        
-
         jPanel1.add(loginPage); 
-//        
         
         loginPage.addPropertyChangeListener("username", evt -> {
             String selectedName = (String) evt.getNewValue();
