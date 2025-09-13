@@ -4,10 +4,6 @@
  */
 package com.netnet.moviedex;
 
-import java.awt.Image;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-
 /**
  *
  * @author quasar
@@ -18,10 +14,7 @@ public class Movie {
      * @return the status
      */
     public String getStatus() {
-        if(status == MovieStatus.RATED){
-            return "RATED";
-        }
-        return "UNRATED";
+        return status.name();
     }
 
     /**
@@ -34,22 +27,29 @@ public class Movie {
     private String coverLink;
     private int timesRated = 0;
     private MovieStatus status;
+    private MovieGenre[] genre;
     private double score;
 
-    public Movie(String title, String coverLink, double score, MovieStatus status) {
+    public Movie(String title, String coverLink, double score, MovieStatus status, MovieGenre[] genre) {
         this.title = title;
         this.coverLink = coverLink;
         this.score = score;
         this.status = status;
+        this.genre = genre;
     }
     
-    
+    public enum MovieGenre{
+        SCI_FI,
+        ROMANCE,
+        ACTION
+    }
     
     public enum MovieStatus{
         RATED,
         UNRATED,
         
     }
+    
 
     /**
      * @return the score
@@ -75,16 +75,6 @@ public class Movie {
     /**
      * @return the coverLink
      */
-    public Icon toIcon(){
-        ImageIcon originalIcon = new ImageIcon(coverLink);
-        Image scaledIcon = new ImageIcon(getClass().getResource(coverLink)).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
-        
-        return new ImageIcon(scaledIcon);
-    }
-
-    /**
-     * @return the timesRated
-     */
     public int getTimesRated() {
         return timesRated;
     }
@@ -94,5 +84,20 @@ public class Movie {
      */
     public void setTimesRated(int timesRated) {
         this.timesRated = timesRated;
+    }
+
+    /**
+     * @return the coverLink
+     */
+    public String getCoverLink() {
+        return coverLink;
+    }
+
+    /**
+     * @return the genre
+     */
+    public MovieGenre[] getGenre() {
+
+        return genre;
     }
 }
