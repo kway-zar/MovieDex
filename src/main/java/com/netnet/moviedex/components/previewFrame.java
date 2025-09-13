@@ -9,12 +9,8 @@ import com.netnet.moviedex.Movie;
 import com.netnet.moviedex.Movie.MovieStatus;
 import com.netnet.moviedex.User;
 import com.netnet.moviedex.UserData;
-import java.awt.Component;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.HashMap;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+
 
 
 /**
@@ -31,30 +27,69 @@ public class previewFrame extends javax.swing.JFrame {
         initComponents();
         
         Movie[] movies = {
-            new Movie("1917", "", 0, MovieStatus.RATED),
-            new Movie("1985", "", 0, MovieStatus.UNRATED),
-            new Movie("1986", "", 0, MovieStatus.UNRATED),
-            new Movie("1987", "", 0, MovieStatus.UNRATED),
-            new Movie("1988", "", 0, MovieStatus.UNRATED),
-            new Movie("1989", "", 0, MovieStatus.UNRATED),
-            new Movie("1990", "", 0, MovieStatus.UNRATED),
-            new Movie("1991", "", 0, MovieStatus.UNRATED),
-            new Movie("1992", "", 0, MovieStatus.UNRATED),
-            new Movie("1993", "", 0, MovieStatus.UNRATED),
-            new Movie("1994", "", 0, MovieStatus.UNRATED),
-            new Movie("1984", "", 0, MovieStatus.UNRATED),
-            new Movie("1985", "", 0, MovieStatus.UNRATED),
-            new Movie("1986", "", 0, MovieStatus.UNRATED),
-            new Movie("1987", "", 0, MovieStatus.UNRATED),
-            new Movie("1988", "", 0, MovieStatus.UNRATED),
-            new Movie("1989", "", 0, MovieStatus.UNRATED),
-            new Movie("1990", "", 0, MovieStatus.UNRATED),
-            new Movie("1991", "", 0, MovieStatus.UNRATED),
-            new Movie("1992", "", 0, MovieStatus.UNRATED),
+            new Movie("1917", "/movieCover/1917.jpg", 9, MovieStatus.RATED,
+                    new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
+            
+            new Movie("Interstellar", "/movieCover/interstellar.jpg", 10, MovieStatus.UNRATED,
+                    new Movie.MovieGenre[]{Movie.MovieGenre.SCI_FI}),
+            
+            new Movie("1986", "", 8, MovieStatus.UNRATED,
+                    new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
+            
+            new Movie("1987", "", 3, MovieStatus.UNRATED,
+                    new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
+            
+            new Movie("1988", "", 2, MovieStatus.UNRATED,
+                    new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
+            
+            new Movie("1989", "", 2, MovieStatus.UNRATED,
+                    new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
+            
+            new Movie("1990", "", 5, MovieStatus.UNRATED,
+                    new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
+            
+            new Movie("1991", "", 0, MovieStatus.UNRATED,
+                    new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
+            
+            new Movie("1992", "", 7, MovieStatus.UNRATED,
+                    new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
+            
+            new Movie("1993", "", 0, MovieStatus.UNRATED,
+                    new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
+            
+            new Movie("1994", "", 8, MovieStatus.UNRATED,
+                    new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
+            
+            new Movie("1984", "", 0, MovieStatus.UNRATED,
+                    new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
+            
+            new Movie("1985", "", 1, MovieStatus.UNRATED,
+                    new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
+            
+            new Movie("1986", "", 5, MovieStatus.UNRATED,
+                    new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
+            
+            new Movie("1987", "", 4, MovieStatus.UNRATED,
+                    new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
+            
+            new Movie("1988", "", 0, MovieStatus.UNRATED,
+                    new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
+            
+            new Movie("1989", "", 0, MovieStatus.UNRATED,
+                    new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
+            
+            new Movie("1990", "", 0, MovieStatus.UNRATED,
+                    new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
+            
+            new Movie("1991", "", 0, MovieStatus.UNRATED,
+                    new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
+            
+            new Movie("1992", "", 0, MovieStatus.UNRATED,
+                    new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
             
                     
         };
-        
+
         User[] users = {
             new User("Guil", "/userIcon.png"),
             new User("Guil2", "/userIcon.png"),
@@ -70,26 +105,17 @@ public class previewFrame extends javax.swing.JFrame {
             map.put(users[i].getName(), userData[i]);
         }
         
-        
-        
         UserCard[] userCards = new UserCard[users.length];
         
-        
-        
-     
         for(int i = 0; i < userCards.length; i++){
             userCards[i] = new UserCard(userData[i]);
-            
-              
+     
         }
-        
         
         Login loginPage = new Login(userCards);
         landingPage1 = new LandingPage(map.get("Guil"));
        
-
         jPanel1.add(loginPage); 
-//        
         
         loginPage.addPropertyChangeListener("username", evt -> {
             String selectedName = (String) evt.getNewValue();

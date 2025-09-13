@@ -6,6 +6,9 @@ package com.netnet.moviedex.components;
 
 import com.netnet.moviedex.Movie;
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -17,6 +20,7 @@ public class MovieCard extends javax.swing.JPanel {
      * Creates new form MovieCard
      */
     Movie movie;
+    private BufferedImage image;
     public MovieCard() {
         setOpaque(false);
         initComponents();
@@ -24,15 +28,26 @@ public class MovieCard extends javax.swing.JPanel {
     public MovieCard(Movie m){
         setOpaque(false);
         movie = m;
+        
+        try {
+            image = ImageIO.read(getClass().getResource(m.getCoverLink()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        
+        
         initComponents();
         title.setText(m.getTitle());
         score.setText(Double.toString(m.getScore()));
+        view.setText(Integer.toString(m.getTimesRated()));
         if(m.getStatus().equals("UNRATED")){
             status.setForeground(new Color(255,255,255,100));
         }
         status.setText(m.getStatus());
     
     }
+   
     public Movie getMovie(){
         return movie;
         
@@ -49,11 +64,23 @@ public class MovieCard extends javax.swing.JPanel {
     private void initComponents() {
 
         curved_Panel1 = new com.netnet.moviedex.components.Curved_Panel();
-        jLabel1 = new javax.swing.JLabel();
         title = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         status = new javax.swing.JLabel();
         score = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel(){
+            @Override
+            protected void paintComponent(Graphics g){
+                super.paintComponent(g);
+                if (image != null) {
+                    g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
+                }
+            }
+
+        };
+        view = new javax.swing.JLabel();
+
+        setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         title.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         title.setForeground(new java.awt.Color(255, 255, 255));
@@ -71,6 +98,23 @@ public class MovieCard extends javax.swing.JPanel {
         score.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         score.setForeground(new java.awt.Color(255, 255, 255));
         score.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        score.setIcon(new javax.swing.ImageIcon(getClass().getResource("/star.png"))); // NOI18N
+
+        jPanel1.setOpaque(false);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 148, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 153, Short.MAX_VALUE)
+        );
+
+        view.setForeground(new java.awt.Color(107, 107, 107));
+        view.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view.png"))); // NOI18N
 
         javax.swing.GroupLayout curved_Panel1Layout = new javax.swing.GroupLayout(curved_Panel1);
         curved_Panel1.setLayout(curved_Panel1Layout);
@@ -78,31 +122,34 @@ public class MovieCard extends javax.swing.JPanel {
             curved_Panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(curved_Panel1Layout.createSequentialGroup()
                 .addGap(17, 17, 17)
-                .addGroup(curved_Panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(curved_Panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(title)
                     .addGroup(curved_Panel1Layout.createSequentialGroup()
                         .addGroup(curved_Panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(status, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(score, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(22, Short.MAX_VALUE))
+                        .addGroup(curved_Panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(score, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(view, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
         curved_Panel1Layout.setVerticalGroup(
             curved_Panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(curved_Panel1Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(17, 17, 17)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(title)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(curved_Panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(score, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(curved_Panel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(status, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(curved_Panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(score, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(curved_Panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(view, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(status, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -121,10 +168,11 @@ public class MovieCard extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.netnet.moviedex.components.Curved_Panel curved_Panel1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel score;
     private javax.swing.JLabel status;
     private javax.swing.JLabel title;
+    private javax.swing.JLabel view;
     // End of variables declaration//GEN-END:variables
 }

@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+  <Properties>
+    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+      <Color id="Hand Cursor"/>
+    </Property>
+  </Properties>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
@@ -16,9 +21,9 @@
 
   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
   <SubComponents>
-    <Container class="com.netnet.netflixlike.components.Curved_Panel" name="curved_Panel1">
+    <Container class="com.netnet.moviedex.components.Curved_Panel" name="curved_Panel1">
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new com.netnet.netflixlike.components.Curved_Panel(&quot;#141416&quot;)"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new com.netnet.moviedex.components.Curved_Panel(&quot;#141416&quot;)"/>
       </AuxValues>
 
       <Layout>
