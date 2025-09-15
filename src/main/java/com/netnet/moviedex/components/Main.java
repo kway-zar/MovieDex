@@ -17,13 +17,14 @@ import java.util.HashMap;
  *
  * @author quasar
  */
-public class previewFrame extends javax.swing.JFrame {
+public class Main extends javax.swing.JFrame {
 
     /**
      * Creates new form previewFrame
      */
     LandingPage landingPage1;
-    public previewFrame() {
+    private HashMap<String, UserData> map = new HashMap<>();
+    public Main() {
         initComponents();
         
         Movie[] movies = {
@@ -98,43 +99,40 @@ public class previewFrame extends javax.swing.JFrame {
  
         };
         UserData[] userData = new UserData[users.length];
-        HashMap<String, UserData> map = new HashMap<>();
+        
         
         for(int i = 0; i < users.length; i++){
             userData[i] = new UserData(users[i], movies);
             map.put(users[i].getName(), userData[i]);
         }
         
-        UserCard[] userCards = new UserCard[users.length];
+        LoginCard[] userCards = new LoginCard[users.length];
         
         for(int i = 0; i < userCards.length; i++){
-            userCards[i] = new UserCard(userData[i]);
+            userCards[i] = new LoginCard(userData[i]);
      
         }
         
         Login loginPage = new Login(userCards);
-        landingPage1 = new LandingPage(map.get("Guil"));
-       
         jPanel1.add(loginPage); 
         
         loginPage.addPropertyChangeListener("username", evt -> {
             String selectedName = (String) evt.getNewValue();
             
-            landingPage1 = new LandingPage(map.get(selectedName));
+            landingPage1 = new LandingPage(getMap().get(selectedName), this);
             jPanel1.remove(loginPage); 
             jPanel1.add(landingPage1);
             jPanel1.revalidate();
             jPanel1.repaint();
-        });
+        }); 
         
-        
-             
-        
-        
-        //jPanel1.add(landingPage1);
-        
-        
+
     }
+    
+    public HashMap<String, UserData> getMap() {
+        return map;
+    }
+
     
     
     /**
@@ -181,21 +179,22 @@ public class previewFrame extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(previewFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(previewFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(previewFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(previewFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 FlatDarculaLaf.setup();
-                new previewFrame().setVisible(true);
+                new Main().setVisible(true);
             }
         });
     }

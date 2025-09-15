@@ -33,12 +33,12 @@ public class Login extends javax.swing.JPanel {
     /**
      * Creates new form Login
      */
-    private UserCard[] userCard = new UserCard[4];
+    private LoginCard[] userCard = new LoginCard[4];
     private String userName = "";
     public Login() {
         initComponents();
     }
-    public Login(UserCard[] users){
+    public Login(LoginCard[] users){
         setOpaque(false);
         initComponents();
         initializeUserCards(users);
@@ -46,7 +46,7 @@ public class Login extends javax.swing.JPanel {
         
         
     }
-    private void initializeUserCards(UserCard[] users){
+    private void initializeUserCards(LoginCard[] users){
         jPanel1.setLayout(new GridLayout(1, 4, 5, 5));
         
         for(int i = 0; i < 4; i++){

@@ -1,15 +1,12 @@
 com\netnet\moviedex\Main.class
 com\netnet\moviedex\Main$1.class
 com\netnet\moviedex\Movie.class
-com\netnet\moviedex\components\previewFrame.class
 com\netnet\moviedex\components\LandingPage$1.class
 com\netnet\moviedex\components\Login$1.class
 com\netnet\moviedex\QuickSort.class
 com\netnet\moviedex\components\Curved_Panel.class
 com\netnet\moviedex\UserData.class
 com\netnet\moviedex\components\LandingPage.class
-com\netnet\moviedex\components\previewFrame$1.class
-com\netnet\moviedex\components\UserCard.class
 com\netnet\moviedex\components\Login.class
 com\netnet\moviedex\components\MovieCard.class
 com\netnet\moviedex\Movie$MovieStatus.class

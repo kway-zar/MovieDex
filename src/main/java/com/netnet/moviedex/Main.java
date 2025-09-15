@@ -5,7 +5,7 @@
 package com.netnet.moviedex;
 
 import com.formdev.flatlaf.FlatDarculaLaf;
-import com.netnet.moviedex.components.UserCard;
+import com.netnet.moviedex.components.LoginCard;
 import java.awt.BorderLayout;
 
 /**

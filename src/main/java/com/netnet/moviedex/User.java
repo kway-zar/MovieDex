@@ -28,7 +28,8 @@ public class User {
 //        return list;
 //    }
     private String name;
-    String iconLink;
+    private String iconLink;
+    public int moviesRated = 0;
 //    private Movie[] list;
     
     public User(String name, String link){
@@ -39,13 +40,25 @@ public class User {
     
     }
     
-    
+    public void INCREASE_RATING_COUNT(){
+        moviesRated++;
+    }
+    public int getCount(){
+        return moviesRated;
+    }
     
     public Icon toIcon(){
-        ImageIcon originalIcon = new ImageIcon(iconLink);
-        Image scaledIcon = new ImageIcon(getClass().getResource(iconLink)).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        ImageIcon originalIcon = new ImageIcon(getIconLink());
+        Image scaledIcon = new ImageIcon(getClass().getResource(getIconLink())).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
         
         return new ImageIcon(scaledIcon);
     }
     //array of movies
+
+    /**
+     * @return the iconLink
+     */
+    public String getIconLink() {
+        return iconLink;
+    }
 }

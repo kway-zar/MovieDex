@@ -7,10 +7,17 @@ package com.netnet.moviedex.components;
 import com.netnet.moviedex.Movie;
 import com.netnet.moviedex.QuickSort;
 import com.netnet.moviedex.UserData;
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
 import javax.swing.SwingUtilities;
 
 /**
@@ -23,194 +30,269 @@ public class LandingPage extends javax.swing.JPanel {
      * Creates new form LandingPage
      */
     private Movie[] displayList;
-    
-    public void setDisplayList(Movie[] m){
-        Movie[] old = this.displayList;
-        this.displayList = m;
-        firePropertyChange("list", old, this.displayList);
-        
-    }
-    public void renderMovieCard(MovieCard[] list){
-        
-        if(jPanel1.getComponentCount() > 1){
-            jPanel1.removeAll();
+    boolean isMovieTab = true;
+    private Main parent;
 
-        }
-        for(MovieCard card: list){
-            jPanel1.add(card);
-        }
-    }
-    
-    public LandingPage(){
+    public LandingPage() {
         setOpaque(false);
         initComponents();
-        
+
     }
-    
-    public LandingPage(UserData user) {
+
+    public LandingPage(UserData user, Main parent) {
+        this.parent = parent;
         setOpaque(false);
         initComponents();
-        
 
-        
-        MovieCard[] movieList = new MovieCard[user.getMovies().length];
-        displayList = QuickSort.sort(user.getMovies(), false, false);
-        
-        for(int i = 0; i < user.getMovies().length; i++){
-            movieList[i] = new MovieCard(displayList[i]);
-        
-        }
-        
         sortType.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e){
+            public void actionPerformed(ActionEvent e) {
                 String preferredSorting = (String) sortType.getSelectedItem();
                 sortCard(preferredSorting);
-                
+
             }
         });
-        
-        
-        genre.addActionListener(new ActionListener(){
+
+        genre.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e){
-            
-                String preferredGenre = (String)genre.getSelectedItem();
+            public void actionPerformed(ActionEvent e) {
+
+                String preferredGenre = (String) genre.getSelectedItem();
                 String preferredSorting = (String) sortType.getSelectedItem();
                 setDisplayList(user.getMovies());
                 sortCard(preferredSorting);
-                
+
                 System.out.println(preferredGenre);
-                
-                switch(preferredGenre){
+
+                switch (preferredGenre) {
                     case "Action" -> {
                         ArrayList<Integer> indexes = similarity(displayList, preferredGenre);
                         filterGenre(indexes);
-                        
+
                     }
                     case "Drama" -> {
                         ArrayList<Integer> indexes = similarity(displayList, preferredGenre);
-                        filterGenre(indexes);                        
-                    
+                        filterGenre(indexes);
+
                     }
                     case "Sci-fi" -> {
                         preferredGenre = "sci_fi";
                         ArrayList<Integer> indexes = similarity(displayList, preferredGenre);
                         filterGenre(indexes);
                     }
-                    case "All" ->{
+                    case "Romance" -> {
+                        ArrayList<Integer> indexes = similarity(displayList, preferredGenre);
+                        filterGenre(indexes);
+                    }
+                    case "All" -> {
                         MovieCard[] movieList = new MovieCard[user.getMovies().length];
-                        
-                        for(int i = 0; i < user.getMovies().length; i++ ){
+
+                        for (int i = 0; i < user.getMovies().length; i++) {
                             movieList[i] = new MovieCard(displayList[i]);
-                        
+
                         }
-                        
-                        renderMovieCard(movieList);
+
+                        renderCard(movieList);
                         jScrollPane1.getVerticalScrollBar().setValue(0);
                         SwingUtilities.updateComponentTreeUI(genre);
-                    }     
-                
+                    }
+
                 }
-                       
-                
+
             }
-            
-            
+
         });
-        jPanel1.setLayout(new GridLayout(4,5,10,10));
+
+        UserLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (SwingUtilities.isLeftMouseButton(e)) {
+                    viewType(!isMovieTab, user);
+                }
+            }
+
+        });
+        MovieLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (SwingUtilities.isLeftMouseButton(e)) {
+                    isMovieTab = true;
+                    viewType(isMovieTab, user);
+                }
+            }
+
+        });
+
+        viewType(isMovieTab, user);
         jScrollPane1.setViewportView(jPanel1);
-        
-        
-        renderMovieCard(movieList);
-        
+
     }
-    public void filterGenre(ArrayList<Integer> indexes){
+
+    public void viewType(boolean isMovieTab, UserData user) {
+
+        if (isMovieTab == true) {
+            
+            UserLabel.setForeground(Color.WHITE);
+            MovieLabel.setForeground(Color.decode("#950740"));
+            genre.setVisible(true);
+            jLabel2.setVisible(true);
+            
+            MovieCard[] movieList = new MovieCard[user.getMovies().length];
+            displayList = QuickSort.sort(user.getMovies(), false, false);
+            
+            String[] type = {"Popular","Highest", "Lowest"};
+            DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(type);
+            sortType.setModel(model);
+            
+            for (int i = 0; i < user.getMovies().length; i++) {
+                movieList[i] = new MovieCard(displayList[i]);
+
+            }
+            jPanel1.setLayout(new GridLayout(4, 5, 10, 10));
+            renderCard(movieList);
+        } else {
+            
+            this.isMovieTab = false;
+            UserLabel.setForeground(Color.decode("#950740"));
+            MovieLabel.setForeground(Color.WHITE);
+            genre.setVisible(false);
+            jLabel2.setVisible(false);
+
+            String[] type = {"Highest", "Lowest"};
+            DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(type);
+            sortType.setModel(model);
+
+            userCard[] usersList = new userCard[4];
+
+            int i = 0;
+            for (Map.Entry<String, UserData> entry : parent.getMap().entrySet()) {
+                usersList[i] = new userCard(entry.getValue());
+                i++;
+            }
+            jPanel1.setLayout(new GridLayout(0, 5, 10, 10));
+            renderCard(usersList);
+        }
+        SwingUtilities.updateComponentTreeUI(jPanel1);
+    }
+
+    public void filterGenre(ArrayList<Integer> indexes) {
         MovieCard[] movieList = new MovieCard[indexes.size()];
         int j = 0;
-        for(int i: indexes){
+        for (int i : indexes) {
             movieList[j] = new MovieCard(displayList[i]);
             j++;
         }
-        
+
         setDisplayList(indexToMovie(indexes));
 
-        renderMovieCard(movieList);
+        renderCard(movieList);
         jScrollPane1.getVerticalScrollBar().setValue(0);
+
+    }
+
+    public void sortCard(String preferredSorting) {
+        if (preferredSorting.equals("Popular")) {
+            if (isMovieTab == true) {
+                MovieCard[] movieList = new MovieCard[displayList.length];
+                setDisplayList(QuickSort.sort(displayList, false, false));
+                for (int i = 0; i < displayList.length; i++) {
+                    movieList[i] = new MovieCard(displayList[i]);
+
+                }
+                renderCard(movieList);
+            }
+
+        } else if (!preferredSorting.equals("Lowest")) {
+            if (isMovieTab == true) {
+                MovieCard[] movieList = new MovieCard[displayList.length];
+                setDisplayList(QuickSort.sort(displayList, true, false));
+                for (int i = 0; i < displayList.length; i++) {
+                    movieList[i] = new MovieCard(displayList[i]);
+
+                }
+                renderCard(movieList);
+            }
+
+        } else {
+            if (isMovieTab == true) {
+                MovieCard[] movieList = new MovieCard[displayList.length];
+                setDisplayList(QuickSort.sort(displayList, true, true));
+                for (int i = 0; i < displayList.length; i++) {
+                    movieList[i] = new MovieCard(displayList[i]);
+
+                }
+                renderCard(movieList);
+            }
+        }
+        jScrollPane1.getVerticalScrollBar().setValue(0);
+
+    }
+
+    public void setDisplayList(Movie[] m) {
+        Movie[] old = this.displayList;
+        this.displayList = m;
+        firePropertyChange("list", old, this.displayList);
         SwingUtilities.updateComponentTreeUI(jPanel1);
-        
-        
-    }
-    public void sortCard(String preferredSorting){
-        if(preferredSorting.equals("Popular")){
-                    MovieCard[] movieList = new MovieCard[displayList.length];
-                    setDisplayList(QuickSort.sort(displayList,false,false));
-                    for(int i = 0; i < displayList.length; i++){
-                        movieList[i] = new MovieCard(displayList[i]);
-
-                    }
-                    renderMovieCard(movieList);
-                    jScrollPane1.getVerticalScrollBar().setValue(0);
-                    SwingUtilities.updateComponentTreeUI(sortType);
-                }
-                
-                
-        else if(!preferredSorting.equals("Lowest")){
-                    MovieCard[] movieList = new MovieCard[displayList.length];
-                    setDisplayList(QuickSort.sort(displayList,true,false));
-                    for(int i = 0; i < displayList.length; i++){
-                        movieList[i] = new MovieCard(displayList[i]);
-
-                    }
-                    renderMovieCard(movieList);
-                    jScrollPane1.getVerticalScrollBar().setValue(0);
-                    SwingUtilities.updateComponentTreeUI(sortType);
-                    
-                    
-                } else {
-                    MovieCard[] movieList = new MovieCard[displayList.length];
-                    setDisplayList(QuickSort.sort(displayList,true,true));
-                    for(int i = 0; i < displayList.length; i++){
-                        movieList[i] = new MovieCard(displayList[i]);
-
-                    }
-                    renderMovieCard(movieList);
-                    jScrollPane1.getVerticalScrollBar().setValue(0);
-                    SwingUtilities.updateComponentTreeUI(sortType);
-                    
-                }
 
     }
-    
-    public Movie[] indexToMovie(ArrayList<Integer> indexes){
+
+    public void renderCard(MovieCard[] list) {
+
+        if (jPanel1.getComponentCount() >= 1) {
+            jPanel1.removeAll();
+
+        }
+        for (MovieCard card : list) {
+            jPanel1.add(card);
+        }
+        revalidate();
+        repaint();
+    }
+
+    public void renderCard(userCard[] list) {
+
+        if (jPanel1.getComponentCount() >= 1) {
+            jPanel1.removeAll();
+
+        }
+        for (userCard card : list) {
+
+            jPanel1.add(card);
+        }
+        revalidate();
+        repaint();
+    }
+
+    public Movie[] indexToMovie(ArrayList<Integer> indexes) {
         Movie[] newList = new Movie[indexes.size()];
         int k = 0;
-        for(int i : indexes){
+        for (int i : indexes) {
             newList[k] = displayList[i];
             k++;
         }
         return newList;
-    
+
     }
-    public ArrayList similarity(Movie[] m, String genre){
+
+    public ArrayList similarity(Movie[] m, String genre) {
         ArrayList<Integer> index = new ArrayList<>();
-        if(m != null){
-            for(int i = 0; i < m.length; i++){
-            Movie.MovieGenre[] genres = m[i].getGenre();
-            for(Movie.MovieGenre j: genres){
-                if(j.name().equalsIgnoreCase(genre)){
-                    index.add(i);
-                    
+        if (m != null) {
+            for (int i = 0; i < m.length; i++) {
+                Movie.MovieGenre[] genres = m[i].getGenre();
+                for (Movie.MovieGenre j : genres) {
+                    if (j.name().equalsIgnoreCase(genre)) {
+                        index.add(i);
+
+                    }
                 }
-            } 
+            }
+
         }
-        
-        }
-        
+
         return index;
-        
-        
+
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

@@ -8,17 +8,17 @@ import com.netnet.moviedex.UserData;
  *
  * @author quasar
  */
-public class UserCard extends javax.swing.JPanel {
+public class LoginCard extends javax.swing.JPanel {
 
     /**
      * Creates new form UserCard
      */
     UserData user;
-    public UserCard() {
+    public LoginCard() {
         setOpaque(false);
         initComponents();
     }
-    public UserCard(UserData user){
+    public LoginCard(UserData user){
         
         setOpaque(false);
         this.user = user;
