@@ -11,6 +11,20 @@ package com.netnet.moviedex;
 public class Movie {
 
     /**
+     * @return the index
+     */
+    public int getIndex() {
+        return index;
+    }
+
+    /**
+     * @param index the index to set
+     */
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    /**
      * @return the status
      */
     public String getStatus() {
@@ -26,6 +40,7 @@ public class Movie {
     private String title;
     private String coverLink;
     private int timesRated = 0;
+    private int index = 0;
     private MovieStatus status;
     private MovieGenre[] genre;
     private double score;
@@ -79,11 +94,10 @@ public class Movie {
         return timesRated;
     }
 
-    /**
-     * @param timesRated the timesRated to set
-     */
-    public void setTimesRated(int timesRated) {
-        this.timesRated = timesRated;
+
+
+    public void setTimesRated() {
+        this.timesRated++;
     }
 
     /**

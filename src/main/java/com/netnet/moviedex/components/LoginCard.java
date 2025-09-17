@@ -4,6 +4,10 @@
  */
 package com.netnet.moviedex.components;
 import com.netnet.moviedex.UserData;
+import java.awt.Graphics;
+import java.awt.Shape;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
 /**
  *
  * @author quasar
@@ -14,6 +18,7 @@ public class LoginCard extends javax.swing.JPanel {
      * Creates new form UserCard
      */
     UserData user;
+    private BufferedImage image;
     public LoginCard() {
         setOpaque(false);
         initComponents();
@@ -24,7 +29,11 @@ public class LoginCard extends javax.swing.JPanel {
         this.user = user;
         initComponents();
         
-        jLabel1.setIcon(user.getUser().toIcon());
+        try {
+            image = ImageIO.read(getClass().getResource(user.getUser().getIconLink()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         jLabel2.setText(user.getUser().getName());
 
     }
@@ -43,10 +52,36 @@ public class LoginCard extends javax.swing.JPanel {
     private void initComponents() {
 
         curved_Panel1 = new com.netnet.moviedex.components.Curved_Panel("#141416");
-        jLabel1 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel(){
+            @Override
+            protected void paintComponent(Graphics g){
+                Graphics g2 = (Graphics)g;
+                Shape clip = new java.awt.geom.RoundRectangle2D.Double(0, 0, this.getWidth(), this.getHeight(), 10, 10);
+
+                g2.setClip(clip);
+                if (image != null) {
+                    g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
+                }
+                repaint();
+            }
+
+        };
         jLabel2 = new javax.swing.JLabel();
 
         setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+        jPanel2.setOpaque(false);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 120, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 115, Short.MAX_VALUE)
+        );
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(149, 7, 64));
@@ -57,21 +92,20 @@ public class LoginCard extends javax.swing.JPanel {
         curved_Panel1Layout.setHorizontalGroup(
             curved_Panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(curved_Panel1Layout.createSequentialGroup()
-                .addGroup(curved_Panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(curved_Panel1Layout.createSequentialGroup()
-                        .addGap(36, 36, 36)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(curved_Panel1Layout.createSequentialGroup()
-                        .addGap(64, 64, 64)
-                        .addComponent(jLabel2)))
-                .addGap(0, 37, Short.MAX_VALUE))
+                .addGap(64, 64, 64)
+                .addComponent(jLabel2)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, curved_Panel1Layout.createSequentialGroup()
+                .addContainerGap(35, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33))
         );
         curved_Panel1Layout.setVerticalGroup(
             curved_Panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(curved_Panel1Layout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addContainerGap(20, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(28, 28, 28))
         );
@@ -82,7 +116,7 @@ public class LoginCard extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.netnet.moviedex.components.Curved_Panel curved_Panel1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables
 }

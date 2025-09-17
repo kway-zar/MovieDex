@@ -7,6 +7,7 @@ package com.netnet.moviedex.components;
 import com.netnet.moviedex.User;
 import com.netnet.moviedex.UserData;
 import java.awt.Graphics;
+import java.awt.Shape;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
@@ -58,10 +59,14 @@ public class userCard extends javax.swing.JPanel {
         jPanel2 = new javax.swing.JPanel(){
             @Override
             protected void paintComponent(Graphics g){
-                super.paintComponent(g);
+                Graphics g2 = (Graphics)g;
+                Shape clip = new java.awt.geom.RoundRectangle2D.Double(0, 0, this.getWidth(), this.getHeight(), 50, 50);
+
+                g2.setClip(clip);
                 if (image != null) {
                     g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
                 }
+                repaint();
             }
 
         };

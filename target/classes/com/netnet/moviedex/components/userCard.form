@@ -107,7 +107,7 @@
                 <Property name="opaque" type="boolean" value="false"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JPanel(){&#xa;    @Override&#xa;    protected void paintComponent(Graphics g){&#xa;        super.paintComponent(g);&#xa;        if (image != null) {&#xa;            g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);&#xa;        }&#xa;    }&#xa;&#xa;}"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JPanel(){&#xa;    @Override&#xa;    protected void paintComponent(Graphics g){&#xa;        Graphics g2 = (Graphics)g;&#xa;        Shape clip = new java.awt.geom.RoundRectangle2D.Double(0, 0, this.getWidth(), this.getHeight(), 50, 50);&#xa;&#xa;        g2.setClip(clip);&#xa;        if (image != null) {&#xa;            g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);&#xa;        }&#xa;        repaint();&#xa;    }&#xa;&#xa;}"/>
               </AuxValues>
 
               <Layout>
