@@ -18,6 +18,7 @@ import java.awt.Shape;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
+import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
 
@@ -30,7 +31,7 @@ public class Main extends javax.swing.JFrame {
     /**
      * Creates new form previewFrame
      */
-    LandingPage landingPage1;
+    Login loginPage;
     private HashMap<String, UserData> map = new HashMap<>();
     private Movie[] movies;
     private BufferedImage image;
@@ -38,7 +39,7 @@ public class Main extends javax.swing.JFrame {
     public Main() {
         initComponents();
 
-        Movie[] movies = {
+        this.movies = new Movie[]{
             new Movie("1917", "/movieCover/1917.jpg", 0, MovieStatus.UNRATED,
             new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
             new Movie("Interstellar", "/movieCover/interstellar.jpg", 0, MovieStatus.UNRATED,
@@ -79,18 +80,20 @@ public class Main extends javax.swing.JFrame {
             new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
             new Movie("1992", "", 0, MovieStatus.UNRATED,
             new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),};
-        movies = QuickSort.sort(movies, false, false);
-        this.movies = movies;
+        //movies = QuickSort.sort(movies, false, false, false);
 
         User[] users = {
             new User("Guil", "/userIcons/user1.jpg"),
-            new User("Guil2", "/userIcon.png"),
-            new User("Guil3", "/userIcon.png"),
-            new User("Guil4", "/userIcon.png"),};
+            new User("Troy", "/userIcons/user2.jpg"),
+            new User("Feliz Navidad", "/userIcons/user3.jpg"),
+            new User("Bince", "/userIcons/user4.jpg"),};
         UserData[] userData = new UserData[users.length];
+        for (int i = 0; i < movies.length; i++) {
+            movies[i].setIndex(i);
+        }
 
         for (int i = 0; i < users.length; i++) {
-            userData[i] = new UserData(users[i], movies);
+            userData[i] = new UserData(users[i], cloneMovies(this.movies));
             map.put(users[i].getName(), userData[i]);
         }
 
@@ -101,54 +104,79 @@ public class Main extends javax.swing.JFrame {
 
         }
 
-        Login loginPage = new Login(userCards);
+        loginPage = new Login(userCards);
         jPanel1.add(loginPage);
 
         loginPage.addPropertyChangeListener("username", evt -> {
             String selectedName = (String) evt.getNewValue();
 
-            landingPage1 = new LandingPage(getMap().get(selectedName), this);
+            LandingPage landingPage1 = new LandingPage(map.get(selectedName), this);
             jPanel1.remove(loginPage);
             jPanel1.add(landingPage1);
             curved_Panel1.setVisible(true);
+
+            landingPage1.addPropertyChangeListener("userData", e -> {
+                UserData user = (UserData) e.getNewValue();
+
+                map.put(user.getUser().getName(), user);
+                landingPage1.refreshMovies(user.getMovies());
+                Movie[] newMovieList = new Movie[getMovies().length];
+                Movie[] oldList = getMovies();
+                Map<String, Integer> scores = new HashMap<>();
+                Map<String, Integer> timesRated = new HashMap<>();
+
+                map.forEach((key, value) -> {
+                    for (Movie m : value.getMovies()) {
+                        String movieKey = m.getTitle();
+                        scores.put(movieKey, scores.getOrDefault(movieKey, 0) + (int) m.getScore());
+                        timesRated.put(movieKey, timesRated.getOrDefault(movieKey, 0) + m.getTimesRated());
+                    }
+                });
+
+                for (int i = 0; i < newMovieList.length; i++) {
+                    Movie oldMovie = oldList[i];
+                    String key = oldMovie.getTitle();
+
+                    Movie copy = new Movie(oldMovie.getTitle(), oldMovie.getCoverLink(),
+                            0, MovieStatus.UNRATED, oldMovie.getGenre());
+                    copy.setIndex(oldMovie.getIndex());
+
+                    int totalScore = scores.getOrDefault(key, 0);
+                    int totalTimes = timesRated.getOrDefault(key, 0);
+                    copy.setScore(totalTimes > 0 ? (double) totalScore / totalTimes : 0);
+                    copy.setDisplayRated(totalTimes);
+                    newMovieList[i] = copy;
+                }
+                newMovieList = QuickSort.sort(newMovieList, false, false, true);
+
+                setMovies(newMovieList);
+                landingPage1.refreshMovies(this.movies);
+                System.out.println("List Updated");
+                SwingUtilities.updateComponentTreeUI(jPanel4);
+            });
+
             try {
                 image = ImageIO.read(getClass().getResource(getMap().get(selectedName).getUser().getIconLink()));
+                jLabel2.setText(selectedName);
                 jPanel3.repaint();
                 jPanel1.revalidate();
                 jPanel1.repaint();
-                
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            
+
         });
-        if (landingPage1 != null) {
 
-            landingPage1.addPropertyChangeListener("newUserList", evt -> {
-                UserData user = (UserData) evt.getNewValue();
-                map.put(user.getUser().getName(), user);
-                Movie[] newMovieList = new Movie[getMovies().length];
-                final Movie[] oldList = getMovies();
-                int[] scores = new int[getMovies().length];
-                int[] timesRated = new int[getMovies().length];
-                for (int i = 0; i < map.size(); i++) {
+    }
 
-                    for (Movie m : map.get(i).getMovies()) {
-                        scores[i] += (int) m.getScore();
-                        timesRated[i] = m.getTimesRated();
-                    }
-                }
-                for (int i = 0; i < newMovieList.length; i++) {
-
-                    newMovieList[i] = oldList[i];
-                    newMovieList[i].setScore(scores[i] / timesRated[i]);
-                }
-
-                setMovies(newMovieList);
-                SwingUtilities.updateComponentTreeUI(this);
-            });
+    private Movie[] cloneMovies(Movie[] original) {
+        Movie[] copy = new Movie[original.length];
+        for (int i = 0; i < original.length; i++) {
+            Movie m = original[i];
+            copy[i] = new Movie(m.getTitle(), m.getCoverLink(), 0, MovieStatus.UNRATED, m.getGenre());
         }
-
+        return copy;
     }
 
     public HashMap<String, UserData> getMap() {
@@ -186,8 +214,15 @@ public class Main extends javax.swing.JFrame {
                 repaint();
             }
         };
+        jLabel2 = new javax.swing.JLabel();
 
         Logout.setText("Logout");
+        Logout.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Logout.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                LogoutMousePressed(evt);
+            }
+        });
         jPopupMenu1.add(Logout);
         Logout.setUI(new CustomMenuUI());
 
@@ -225,6 +260,10 @@ public class Main extends javax.swing.JFrame {
             .addGap(0, 71, Short.MAX_VALUE)
         );
 
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(149, 7, 64));
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -232,19 +271,25 @@ public class Main extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 953, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 861, Short.MAX_VALUE)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(curved_Panel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(35, 35, 35))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(curved_Panel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(20, 20, 20))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(39, 39, 39)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel4.add(jPanel3, java.awt.BorderLayout.PAGE_END);
@@ -258,7 +303,7 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void showPopUp(MouseEvent e) {
-        jPopupMenu1.show(jPanel3, curved_Panel1.getX() - 100, curved_Panel1.getY() + 25);
+        jPopupMenu1.show(jPanel3, curved_Panel1.getX() - 80, curved_Panel1.getY() + 50);
     }
 
     private void curved_Panel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_curved_Panel1MousePressed
@@ -270,6 +315,24 @@ public class Main extends javax.swing.JFrame {
         // TODO add your handling code here:
 
     }//GEN-LAST:event_curved_Panel1MouseReleased
+
+    private void LogoutMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LogoutMousePressed
+        // TODO add your handling code here:
+
+        if (SwingUtilities.isLeftMouseButton(evt)) {
+
+            curved_Panel1.setVisible(false);
+            
+            jPanel1.remove(1);
+
+            jLabel2.setText("");
+            loginPage.resetSession();
+            jPanel1.add(loginPage);
+            revalidate();
+            repaint();
+
+        }
+    }//GEN-LAST:event_LogoutMousePressed
 
     /**
      * @param args the command line arguments
@@ -312,6 +375,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenuItem Logout;
     private com.netnet.moviedex.components.Curved_Panel curved_Panel1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;

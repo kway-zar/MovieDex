@@ -22,6 +22,9 @@ public class Login extends javax.swing.JPanel {
         this.userName = s;
         firePropertyChange("username", old, this.userName);
     }
+    public void resetSession() {
+        this.userName = "";
+    }
 
     
     public String getUsername(){

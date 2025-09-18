@@ -44,25 +44,23 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jPanel2" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="jPanel2" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="title" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="status" alignment="0" min="-2" pref="97" max="-2" attributes="0"/>
-                              </Group>
+                              <Component id="status" min="-2" pref="97" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="view" min="-2" pref="37" max="-2" attributes="0"/>
                           </Group>
+                          <Component id="title" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="14" max="32767" attributes="0"/>
+                      <EmptySpace pref="22" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
                       <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="title" min="-2" max="-2" attributes="0"/>
@@ -107,18 +105,18 @@
                 <Property name="opaque" type="boolean" value="false"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JPanel(){&#xa;    @Override&#xa;    protected void paintComponent(Graphics g){&#xa;        Graphics g2 = (Graphics)g;&#xa;        Shape clip = new java.awt.geom.RoundRectangle2D.Double(0, 0, this.getWidth(), this.getHeight(), 50, 50);&#xa;&#xa;        g2.setClip(clip);&#xa;        if (image != null) {&#xa;            g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);&#xa;        }&#xa;        repaint();&#xa;    }&#xa;&#xa;}"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JPanel(){&#xa;    @Override&#xa;    protected void paintComponent(Graphics g){&#xa;        Graphics g2 = (Graphics)g;&#xa;        Shape clip = new java.awt.geom.RoundRectangle2D.Double(0, 0, this.getWidth(), this.getHeight(), 20, 20);&#xa;&#xa;        g2.setClip(clip);&#xa;        if (image != null) {&#xa;            g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);&#xa;        }&#xa;        repaint();&#xa;    }&#xa;&#xa;}"/>
               </AuxValues>
 
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="148" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="153" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="141" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>

@@ -30,7 +30,9 @@ public class Movie {
     public String getStatus() {
         return status.name();
     }
-
+    public MovieStatus getMovieStatus() {
+        return status;
+    }
     /**
      * @param status the status to set
      */
@@ -51,6 +53,13 @@ public class Movie {
         this.score = score;
         this.status = status;
         this.genre = genre;
+    }
+    public Movie(Movie m) {
+        this.title = m.getTitle();
+        this.coverLink = m.getCoverLink();
+        this.score = m.getScore();
+        this.status = m.status;
+        this.genre = m.getGenre();
     }
     
     public enum MovieGenre{
@@ -94,10 +103,14 @@ public class Movie {
         return timesRated;
     }
 
-
+    public void setDisplayRated(int i) {
+        this.timesRated = i;
+    }
 
     public void setTimesRated() {
-        this.timesRated++;
+
+            this.timesRated++;
+        
     }
 
     /**

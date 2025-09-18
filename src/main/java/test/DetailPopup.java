@@ -189,6 +189,7 @@ public class DetailPopup extends javax.swing.JPanel implements EventStarRating {
         // TODO add your handling code here:
         if (SwingUtilities.isLeftMouseButton(evt)) {
             closePanel(true);
+            
         }
     }//GEN-LAST:event_jLabel5MouseClicked
 

@@ -48,7 +48,9 @@ public class MovieCard extends javax.swing.JPanel {
         status.setText(m.getStatus());
     
     }
-   
+    public void setDisplayTimesRates(int i) {
+        view.setText(Integer.toString(i));
+    }
     public Movie getMovie(){
         return movie;
         
