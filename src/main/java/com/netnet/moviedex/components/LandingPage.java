@@ -459,14 +459,6 @@ public class LandingPage extends javax.swing.JPanel {
         SwingUtilities.updateComponentTreeUI(jPanel1);
 
     }
-//    public void refreshDisplayList(Movie[] m) {
-//        Main parent = this.parent;
-//        Movie[] global = parent.getMovies();
-//        for(int i = 0; i < global.length; i++) {
-//            
-//        }
-//    }
-
     public void renderCard(MovieCard[] list) {
         Main parent = this.parent;
 
