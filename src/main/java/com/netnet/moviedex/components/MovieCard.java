@@ -7,7 +7,6 @@ package com.netnet.moviedex.components;
 import com.netnet.moviedex.Movie;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Shape;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
