@@ -245,7 +245,6 @@ public class Main extends javax.swing.JFrame {
                 if (image != null) {
                     g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
                 }
-                repaint();
             }
         };
         jLabel2 = new javax.swing.JLabel();
