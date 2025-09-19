@@ -59,7 +59,9 @@ public class Login extends javax.swing.JPanel {
         
         for(int i = 0; i < 4; i++){
             String name = users[i].getUserInfo().getUser().getName();
-            users[i].addMouseListener(new MouseAdapter(){
+            
+            users[i].getPanel().addMouseListener(new MouseAdapter(){
+                
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     if(SwingUtilities.isLeftMouseButton(e)){
@@ -89,6 +91,7 @@ public class Login extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
@@ -96,7 +99,7 @@ public class Login extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
 
         setName(""); // NOI18N
-        setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.LINE_AXIS));
+        setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.PAGE_AXIS));
 
         jPanel2.setOpaque(false);
         jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.Y_AXIS));
