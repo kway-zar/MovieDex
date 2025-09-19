@@ -11,10 +11,28 @@ package com.netnet.moviedex;
 public class Movie {
 
     /**
+     * @return the index
+     */
+    public int getIndex() {
+        return index;
+    }
+
+    /**
+     * @param index the index to set
+     */
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    /**
      * @return the status
      */
     public String getStatus() {
         return status.name();
+    }
+
+    public MovieStatus getMovieStatus() {
+        return status;
     }
 
     /**
@@ -26,6 +44,7 @@ public class Movie {
     private String title;
     private String coverLink;
     private int timesRated = 0;
+    private int index = 0;
     private MovieStatus status;
     private MovieGenre[] genre;
     private double score;
@@ -37,19 +56,27 @@ public class Movie {
         this.status = status;
         this.genre = genre;
     }
-    
-    public enum MovieGenre{
+
+    public Movie(Movie m) {
+        this.title = m.getTitle();
+        this.coverLink = m.getCoverLink();
+        this.score = m.getScore();
+        this.status = m.status;
+        this.timesRated = m.getTimesRated();
+        this.genre = m.getGenre();
+    }
+
+    public enum MovieGenre {
         SCI_FI,
         ROMANCE,
         ACTION
     }
-    
-    public enum MovieStatus{
+
+    public enum MovieStatus {
         RATED,
         UNRATED,
-        
+
     }
-    
 
     /**
      * @return the score
@@ -79,11 +106,18 @@ public class Movie {
         return timesRated;
     }
 
-    /**
-     * @param timesRated the timesRated to set
-     */
-    public void setTimesRated(int timesRated) {
-        this.timesRated = timesRated;
+    public void setDisplayRated(int i) {
+        this.timesRated = i;
+    }
+
+    public void setTimesRated() {
+        
+        if (this.timesRated == 0) {
+            this.timesRated = 1;
+        
+        } else {
+        
+        }
     }
 
     /**
