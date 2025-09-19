@@ -66,7 +66,7 @@ public class userCard extends javax.swing.JPanel {
                 if (image != null) {
                     g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
                 }
-                repaint();
+                // repaint(); // Removed to prevent infinite repaint loop
             }
 
         };
