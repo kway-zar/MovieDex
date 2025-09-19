@@ -117,30 +117,58 @@ public class Main extends javax.swing.JFrame {
                 landingPage1.refreshMovies(user.getMovies());
                 Movie[] newMovieList = new Movie[getMovies().length];
                 Movie[] oldList = getMovies();
-                Map<String, Integer> scores = new HashMap<>();
-                Map<String, Integer> timesRated = new HashMap<>();
+                
+                Map<String, Double> totalScores = new HashMap<>();
+                Map<String, Integer> uniqueRatings = new HashMap<>();
 
+                
                 map.forEach((key, value) -> {
                     for (Movie m : value.getMovies()) {
-                        String movieKey = m.getTitle();
-                        scores.put(movieKey, scores.getOrDefault(movieKey, 0) + (int) m.getScore());
-                        timesRated.put(movieKey, timesRated.getOrDefault(movieKey, 0) + m.getTimesRated());
+                        String movieTitle = m.getTitle();
+                        
+                
+                        if (m.getMovieStatus() == MovieStatus.RATED) {
+                            
+                            totalScores.put(movieTitle, 
+                                totalScores.getOrDefault(movieTitle, 0.0) + m.getScore());
+                            
+                            
+                            uniqueRatings.put(movieTitle, 
+                                uniqueRatings.getOrDefault(movieTitle, 0) + 1);
+                        }
                     }
                 });
 
+                // Debug Purposes
+                System.out.println("GLOBAL MOVIE CALCULATIONS:");
+                for (String title : uniqueRatings.keySet()) {
+                    System.out.println("Movie: " + title + 
+                                      ", Unique ratings: " + uniqueRatings.get(title) + 
+                                      ", Total score: " + totalScores.get(title));
+                }
+
+                //Updates the Global List for display
                 for (int i = 0; i < newMovieList.length; i++) {
                     Movie oldMovie = oldList[i];
-                    String key = oldMovie.getTitle();
+                    String movieTitle = oldMovie.getTitle();
 
                     Movie copy = new Movie(oldMovie.getTitle(), oldMovie.getCoverLink(),
                             0, MovieStatus.UNRATED, oldMovie.getGenre());
                     copy.setIndex(oldMovie.getIndex());
+                    
+                    double totalScore = totalScores.getOrDefault(movieTitle, 0.0);
+                    int ratingCount = uniqueRatings.getOrDefault(movieTitle, 0);
+                    
+                    double avgScore = ratingCount > 0 ? totalScore / ratingCount : 0.0;
+                    
+                    copy.setScore(avgScore);
+                    copy.setDisplayRated(ratingCount); 
 
-                    int totalScore = scores.getOrDefault(key, 0);
-                    int totalTimes = timesRated.getOrDefault(key, 0);
-                    copy.setScore(totalTimes > 0 ? (double) totalScore / totalTimes * 10.0 / 10.0 : 0);
-                    copy.setDisplayRated(totalTimes);
                     newMovieList[i] = copy;
+                    
+                    System.out.println("Global movie updated: " + movieTitle + 
+                                      ", Score: " + avgScore + 
+                                      ", Times rated: " + ratingCount);
                 }
                 newMovieList = QuickSort.sort(newMovieList, false, false, true);
 

@@ -20,44 +20,46 @@ public class MovieCard extends javax.swing.JPanel {
     /**
      * Creates new form MovieCard
      */
-    Movie movie;
+    private Movie movie;
     private BufferedImage image;
+
     public MovieCard() {
         setOpaque(false);
         initComponents();
     }
-    public MovieCard(Movie m){
+
+    public MovieCard(Movie m) {
         setOpaque(false);
+
         this.movie = m;
-        
+
         try {
             image = ImageIO.read(getClass().getResource(m.getCoverLink()));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
-        
-        
+
         initComponents();
         title.setText(m.getTitle());
         score.setText(Double.toString(m.getScore()));
         // Use getDisplayRated for the view counter to show global rating count
         view.setText(Integer.toString(m.getTimesRated()));
-        if(m.getStatus().equals("UNRATED")){
-            status.setForeground(new Color(255,255,255,100));
+        if (m.getStatus().equals("UNRATED")) {
+            status.setForeground(new Color(255, 255, 255, 100));
         }
         status.setText(m.getStatus());
-    
+
     }
+
     public void setDisplayTimesRates(int i) {
         view.setText(Integer.toString(i));
     }
-    public Movie getMovie(){
+
+    public Movie getMovie() {
         return movie;
-        
+
     }
-    
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -179,4 +181,11 @@ public class MovieCard extends javax.swing.JPanel {
     private javax.swing.JLabel title;
     private javax.swing.JLabel view;
     // End of variables declaration//GEN-END:variables
+
+    /**
+     * @param movie the movie to set
+     */
+    public void setMovie(Movie movie) {
+        this.movie = movie;
+    }
 }
