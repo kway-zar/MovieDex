@@ -18,9 +18,9 @@ import javax.swing.SwingUtilities;
 public class Login extends javax.swing.JPanel {
 
     public void setUsername(String s){
-        String old = this.userName;
+//        String old = this.userName;
         this.userName = s;
-        firePropertyChange("username", old, this.userName);
+        firePropertyChange("username", null, this.userName);
     }
     public void resetSession() {
         this.userName = "";
@@ -48,6 +48,11 @@ public class Login extends javax.swing.JPanel {
         
         
         
+    }
+    public void reloadUsers(LoginCard[] users) {
+        jPanel1.removeAll();
+        initializeUserCards(users);
+    
     }
     private void initializeUserCards(LoginCard[] users){
         jPanel1.setLayout(new GridLayout(1, 4, 5, 5));

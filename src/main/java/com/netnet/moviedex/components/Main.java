@@ -34,6 +34,7 @@ public class Main extends javax.swing.JFrame {
     Login loginPage;
     private HashMap<String, UserData> map = new HashMap<>();
     private Movie[] movies;
+    private User[] users;
     private BufferedImage image;
 
     public Main() {
@@ -82,11 +83,12 @@ public class Main extends javax.swing.JFrame {
             new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),};
         //movies = QuickSort.sort(movies, false, false, false);
 
-        User[] users = {
+        this.users = new User[]{
             new User("Guil", "/userIcons/user1.jpg"),
             new User("Troy", "/userIcons/user2.jpg"),
             new User("Feliz Navidad", "/userIcons/user3.jpg"),
             new User("Bince", "/userIcons/user4.jpg"),};
+
         UserData[] userData = new UserData[users.length];
         for (int i = 0; i < movies.length; i++) {
             movies[i].setIndex(i);
@@ -97,14 +99,7 @@ public class Main extends javax.swing.JFrame {
             map.put(users[i].getName(), userData[i]);
         }
 
-        LoginCard[] userCards = new LoginCard[users.length];
-
-        for (int i = 0; i < userCards.length; i++) {
-            userCards[i] = new LoginCard(userData[i]);
-
-        }
-
-        loginPage = new Login(userCards);
+        loginPage = new Login(refreshUsers(userData));
         jPanel1.add(loginPage);
 
         loginPage.addPropertyChangeListener("username", evt -> {
@@ -143,7 +138,7 @@ public class Main extends javax.swing.JFrame {
 
                     int totalScore = scores.getOrDefault(key, 0);
                     int totalTimes = timesRated.getOrDefault(key, 0);
-                    copy.setScore(totalTimes > 0 ? (double) totalScore / totalTimes : 0);
+                    copy.setScore(totalTimes > 0 ? (double) totalScore / totalTimes * 10.0 / 10.0 : 0);
                     copy.setDisplayRated(totalTimes);
                     newMovieList[i] = copy;
                 }
@@ -181,6 +176,17 @@ public class Main extends javax.swing.JFrame {
 
     public HashMap<String, UserData> getMap() {
         return map;
+    }
+
+    public LoginCard[] refreshUsers(UserData[] userData) {
+        LoginCard[] userCards = new LoginCard[userData.length];
+
+        for (int i = 0; i < userCards.length; i++) {
+            userCards[i] = new LoginCard(userData[i]);
+
+        }
+        return userCards;
+
     }
 
     /**
@@ -322,11 +328,22 @@ public class Main extends javax.swing.JFrame {
         if (SwingUtilities.isLeftMouseButton(evt)) {
 
             curved_Panel1.setVisible(false);
-            
+
             jPanel1.remove(1);
 
             jLabel2.setText("");
-            loginPage.resetSession();
+            UserData[] userData = new UserData[map.size()];
+            int i = 0;
+            for (Map.Entry<String, UserData> entry : map.entrySet()) {
+                Object key = entry.getKey();
+                UserData val = entry.getValue();
+                userData[i] = val;
+
+                i++;
+            }
+            //loginPage.reloadUsers(refreshUsers(userData));
+            
+
             jPanel1.add(loginPage);
             revalidate();
             repaint();

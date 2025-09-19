@@ -30,9 +30,11 @@ public class Movie {
     public String getStatus() {
         return status.name();
     }
+
     public MovieStatus getMovieStatus() {
         return status;
     }
+
     /**
      * @param status the status to set
      */
@@ -54,26 +56,27 @@ public class Movie {
         this.status = status;
         this.genre = genre;
     }
+
     public Movie(Movie m) {
         this.title = m.getTitle();
         this.coverLink = m.getCoverLink();
         this.score = m.getScore();
         this.status = m.status;
+        this.timesRated = m.getTimesRated();
         this.genre = m.getGenre();
     }
-    
-    public enum MovieGenre{
+
+    public enum MovieGenre {
         SCI_FI,
         ROMANCE,
         ACTION
     }
-    
-    public enum MovieStatus{
+
+    public enum MovieStatus {
         RATED,
         UNRATED,
-        
+
     }
-    
 
     /**
      * @return the score
@@ -108,9 +111,13 @@ public class Movie {
     }
 
     public void setTimesRated() {
-
-            this.timesRated++;
         
+        if (this.timesRated == 0) {
+            this.timesRated = 1;
+        
+        } else {
+        
+        }
     }
 
     /**

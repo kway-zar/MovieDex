@@ -39,6 +39,7 @@ public class DetailPopup extends javax.swing.JPanel implements EventStarRating {
             e.printStackTrace();
         }
         jLabel2.setText(m.getTitle());
+        // Show the movie's global score for consistency
         jLabel4.setText(Double.toString(m.getScore()));
 
     }
@@ -46,11 +47,14 @@ public class DetailPopup extends javax.swing.JPanel implements EventStarRating {
     @Override
     public void selected(int star) {
         
-        double old = movie.getScore();
+        
+        
         System.out.println("Star received in DetailPopup: " + star);
         SwingUtilities.invokeLater(() -> {
             jLabel4.setText(star + "/5");
-            firePropertyChange("rating", old, star);
+            
+            firePropertyChange("rating", null, Double.valueOf(star));
+            
         });
         
         
@@ -189,6 +193,7 @@ public class DetailPopup extends javax.swing.JPanel implements EventStarRating {
         // TODO add your handling code here:
         if (SwingUtilities.isLeftMouseButton(evt)) {
             closePanel(true);
+            
             
         }
     }//GEN-LAST:event_jLabel5MouseClicked

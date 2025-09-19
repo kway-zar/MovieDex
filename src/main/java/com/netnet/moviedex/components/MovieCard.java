@@ -28,7 +28,7 @@ public class MovieCard extends javax.swing.JPanel {
     }
     public MovieCard(Movie m){
         setOpaque(false);
-        movie = m;
+        this.movie = m;
         
         try {
             image = ImageIO.read(getClass().getResource(m.getCoverLink()));
@@ -41,6 +41,7 @@ public class MovieCard extends javax.swing.JPanel {
         initComponents();
         title.setText(m.getTitle());
         score.setText(Double.toString(m.getScore()));
+        // Use getDisplayRated for the view counter to show global rating count
         view.setText(Integer.toString(m.getTimesRated()));
         if(m.getStatus().equals("UNRATED")){
             status.setForeground(new Color(255,255,255,100));
