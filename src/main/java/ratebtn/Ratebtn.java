@@ -28,12 +28,14 @@ public class Ratebtn extends JButton{
             @Override
             public void mouseEntered(MouseEvent e) {
                 setBackground(colorOver);
+                setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.HAND_CURSOR));
                 over=true;
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
                 setBackground(color);
+                setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
                 over=false;
             }
 

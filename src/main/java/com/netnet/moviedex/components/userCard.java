@@ -22,6 +22,7 @@ public class userCard extends javax.swing.JPanel {
      */
     private BufferedImage image;
     private User user;
+    private UserData uData;
     
     public userCard() {
         setOpaque(false);
@@ -30,7 +31,8 @@ public class userCard extends javax.swing.JPanel {
     public userCard(UserData u){
         setOpaque(false);
         initComponents();
-        user = u.getUser();
+        this.uData = u;
+        user = uData.getUser();
         
         try {
             image = ImageIO.read(getClass().getResource(user.getIconLink()));
@@ -41,8 +43,13 @@ public class userCard extends javax.swing.JPanel {
         view.setText(Integer.toString(user.getCount()));
         
     }
-
+    public UserData getUserData() {
+        return uData;
+    }
+    public javax.swing.JPanel getCard() {
+        return jPanel1;
     
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

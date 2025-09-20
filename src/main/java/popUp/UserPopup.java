@@ -4,15 +4,21 @@
  */
 package popUp;
 
+import com.netnet.moviedex.Movie;
+import com.netnet.moviedex.UserData;
+import com.netnet.moviedex.components.MovieCard;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridLayout;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+
 
 /**
  *
@@ -33,14 +39,29 @@ public class UserPopup extends javax.swing.JPanel {
 
     }
 
-    public UserPopup() {
+    public UserPopup(UserData user) {
+        //UIManager.put("ScrollBar.thumb", new Color(100, 100, 200));
+        UIManager.put("ScrollBar.track", new Color(147,0,58));  
         initComponents();
         
+        name.setText(user.getUser().getName());
+        ratingCount.setText(Integer.toString(user.getUser().getCount()));
+        jLabel3.setText("RANK " + user.getUser().getRanking());
+        
         try {
-            image = ImageIO.read(getClass().getResource("/userIcons/user1.jpg"));
+            image = ImageIO.read(getClass().getResource(user.getUser().getIconLink()));
         } catch (Exception e) {
             e.printStackTrace();
         }
+        
+        for(Movie movie: user.getMovies()) {
+            if(movie.getMovieStatus() == Movie.MovieStatus.RATED) {
+                MovieCard card = new MovieCard(movie);
+                listContainer.add(card);
+            }
+        }
+        
+        listContainer.setLayout(new GridLayout(1, 0, 10, 10));
     }
 
     /**
@@ -93,11 +114,12 @@ public class UserPopup extends javax.swing.JPanel {
         jLayeredPane1 = new javax.swing.JLayeredPane();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jPanel2 = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        listContainer = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        name = new javax.swing.JLabel();
         ratingCount = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
 
         jPanel1.setBackground(new java.awt.Color(38, 38, 38));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -126,82 +148,86 @@ public class UserPopup extends javax.swing.JPanel {
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("LIST");
-        jLayeredPane1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 50, -1, 51));
+        jLayeredPane1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 50, -1, 51));
 
         jScrollPane1.setBackground(new java.awt.Color(149, 7, 64));
+        jScrollPane1.setBorder(null);
         jScrollPane1.setForeground(new java.awt.Color(149, 7, 64));
         jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-        jLayeredPane1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, 500, 210));
+        jScrollPane1.setOpaque(false);
 
-        jPanel1.add(jLayeredPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 148, 620, 410));
+        listContainer.setBackground(new java.awt.Color(147, 0, 58));
 
-        jPanel2.setOpaque(false);
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 50, Short.MAX_VALUE)
+        javax.swing.GroupLayout listContainerLayout = new javax.swing.GroupLayout(listContainer);
+        listContainer.setLayout(listContainerLayout);
+        listContainerLayout.setHorizontalGroup(
+            listContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 750, Short.MAX_VALUE)
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 40, Short.MAX_VALUE)
+        listContainerLayout.setVerticalGroup(
+            listContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
         );
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 0, 50, 40));
+        jScrollPane1.setViewportView(listContainer);
+
+        jLayeredPane1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 100, 750, 300));
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("RANK");
+        jLayeredPane1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 0, 100, -1));
+
+        jPanel1.add(jLayeredPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 148, 840, 410));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText("X");
+        jLabel5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel5MouseClicked(evt);
             }
         });
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 0, 38, -1));
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 0, 40, -1));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 48)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Username");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 70, -1, 51));
+        name.setFont(new java.awt.Font("Segoe UI", 1, 48)); // NOI18N
+        name.setForeground(new java.awt.Color(255, 255, 255));
+        name.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        name.setText("Username");
+        jPanel1.add(name, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 70, -1, 51));
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(149, 7, 64));
-        jLabel3.setText("Movies Rated:");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 120, 100, -1));
-
-        ratingCount.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        ratingCount.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         ratingCount.setForeground(new java.awt.Color(149, 7, 64));
         ratingCount.setText("i");
-        jPanel1.add(ratingCount, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 120, 46, 20));
+        jPanel1.add(ratingCount, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 120, 140, -1));
+
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(149, 7, 64));
+        jLabel7.setText("Movies Rated:");
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 120, 140, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 572, Short.MAX_VALUE)
+            .addGap(0, 840, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 572, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 500, Short.MAX_VALUE)
+            .addGap(0, 558, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
         // TODO add your handling code here:
         if (SwingUtilities.isLeftMouseButton(evt)) {
+            
             closePanel(true);
 
         }
@@ -209,15 +235,16 @@ public class UserPopup extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JLayeredPane jLayeredPane2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPanel listContainer;
+    private javax.swing.JLabel name;
     private javax.swing.JLabel ratingCount;
     // End of variables declaration//GEN-END:variables
 }

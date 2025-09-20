@@ -19,6 +19,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JDialog;
 import javax.swing.SwingUtilities;
 import popUp.DetailPopup;
+import popUp.UserPopup;
 
 /**
  *
@@ -54,7 +55,7 @@ public class LandingPage extends javax.swing.JPanel {
             public void actionPerformed(ActionEvent e) {
                 String preferredSorting = (String) sortType.getSelectedItem();
                 System.out.println("Sort type changed to: " + preferredSorting + " (isMovieTab: " + isMovieTab + ")");
-                
+
                 if (isMovieTab) {
                     // Movie tab sorting
                     String preferredGenre = (String) genre.getSelectedItem();
@@ -174,7 +175,6 @@ public class LandingPage extends javax.swing.JPanel {
             renderCard(movieList);
         } else {
 
-            
             UserLabel.setForeground(Color.decode("#950740"));
             MovieLabel.setForeground(Color.WHITE);
             genre.setVisible(false);
@@ -183,10 +183,9 @@ public class LandingPage extends javax.swing.JPanel {
             String[] type = {"Highest", "Lowest"};
             DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(type);
             sortType.setModel(model);
-            
+
             sortUserCards(sortType.getSelectedItem().toString());
-            
-            
+
             jPanel1.setLayout(new GridLayout(0, 5, 10, 10));
 
         }
@@ -199,6 +198,30 @@ public class LandingPage extends javax.swing.JPanel {
 
         for (Map.Entry<String, UserData> entry : parent.getMap().entrySet()) {
             usersList[i] = new userCard(entry.getValue());
+            usersList[i].getCard().addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    System.out.println("card clicked");
+                    JDialog dialog = new JDialog(parent, "User Details", false);
+                    dialog.setUndecorated(true);
+                    dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                    dialog.setSize(840, 558);
+                    dialog.setLocationRelativeTo(parent);
+
+                    UserPopup userPopup = new UserPopup(entry.getValue());
+                    dialog.setContentPane(userPopup);
+                    dialog.setVisible(true);
+                    parent.setEnabled(false);
+                    userPopup.addPropertyChangeListener("closePanel", evt -> {
+                        parent.setEnabled(true);
+                        dialog.dispose();
+                        
+                        
+                    });
+                }
+
+            });
+
             i++;
         }
         //Use insertion since the users size is small
@@ -227,10 +250,17 @@ public class LandingPage extends javax.swing.JPanel {
                 }
 
             }
+            i = 1;
+            for (userCard user : usersList) {
+                user.getUserData().getUser().assignRanking(i);
+                firePropertyChange("userData", null, user.getUserData());
+
+                i++;
+            }
 
         }
+
         renderCard(usersList);
-        
 
     }
 
@@ -318,8 +348,9 @@ public class LandingPage extends javax.swing.JPanel {
                 dialog.setContentPane(detailPopup);
 
                 dialog.setVisible(true);
-
+                parent.setEnabled(false);
                 detailPopup.addPropertyChangeListener("closePanel", evt -> {
+                    parent.setEnabled(true);
                     dialog.dispose();
                 });
                 detailPopup.addPropertyChangeListener("rating", evt -> {

@@ -2,6 +2,7 @@ com\netnet\moviedex\Main.class
 popUp\DetailPopup$1.class
 popUp\RatePopup$1.class
 com\netnet\moviedex\components\CustomMenuUI.class
+com\netnet\moviedex\components\LandingPage$6.class
 com\mycompany\star\rating\StarRating.class
 popUp\RatePopup.class
 com\mycompany\star\rating\StarRating$4.class
