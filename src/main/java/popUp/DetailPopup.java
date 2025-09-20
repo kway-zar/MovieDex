@@ -1,4 +1,4 @@
-package test;
+package popUp;
 
 import java.awt.Dialog;
 import java.awt.Window;
@@ -47,9 +47,6 @@ public class DetailPopup extends javax.swing.JPanel implements EventStarRating {
     @Override
     public void selected(int star) {
         
-        
-        
-        System.out.println("Star received in DetailPopup: " + star);
         SwingUtilities.invokeLater(() -> {
             jLabel4.setText(star + "/5");
             
@@ -113,7 +110,6 @@ public class DetailPopup extends javax.swing.JPanel implements EventStarRating {
 
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("[description]");
         jLayeredPane1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 161, 501, 160));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 48)); // NOI18N
@@ -172,12 +168,13 @@ public class DetailPopup extends javax.swing.JPanel implements EventStarRating {
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText("X");
+        jLabel5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel5MouseClicked(evt);
             }
         });
-        add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 0, 38, -1));
+        add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 0, 38, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     private void star1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_star1ActionPerformed

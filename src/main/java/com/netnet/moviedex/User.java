@@ -30,6 +30,7 @@ public class User {
     private String name;
     private String iconLink;
     public int moviesRated = 0;
+    public int ranking = 0;
 //    private Movie[] list;
     
     public User(String name, String link){
@@ -39,7 +40,13 @@ public class User {
         
     
     }
+    public void assignRanking(int rank) {
+        this.ranking = rank;
+    }
     
+    public int getRanking() {
+        return ranking;
+    }
     public void INCREASE_RATING_COUNT(){
         moviesRated++;
     }

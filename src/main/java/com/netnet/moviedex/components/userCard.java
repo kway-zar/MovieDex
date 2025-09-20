@@ -21,7 +21,8 @@ public class userCard extends javax.swing.JPanel {
      * Creates new form userCard
      */
     private BufferedImage image;
-    User user;
+    private User user;
+    private UserData uData;
     
     public userCard() {
         setOpaque(false);
@@ -30,7 +31,8 @@ public class userCard extends javax.swing.JPanel {
     public userCard(UserData u){
         setOpaque(false);
         initComponents();
-        user = u.getUser();
+        this.uData = u;
+        user = uData.getUser();
         
         try {
             image = ImageIO.read(getClass().getResource(user.getIconLink()));
@@ -41,8 +43,13 @@ public class userCard extends javax.swing.JPanel {
         view.setText(Integer.toString(user.getCount()));
         
     }
-
+    public UserData getUserData() {
+        return uData;
+    }
+    public javax.swing.JPanel getCard() {
+        return jPanel1;
     
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -60,13 +67,12 @@ public class userCard extends javax.swing.JPanel {
             @Override
             protected void paintComponent(Graphics g){
                 Graphics g2 = (Graphics)g;
-                Shape clip = new java.awt.geom.RoundRectangle2D.Double(0, 0, this.getWidth(), this.getHeight(), 20, 20);
+                Shape clip = new java.awt.geom.RoundRectangle2D.Double(0, 0, this.getWidth(), this.getHeight(), 10, 10);
 
                 g2.setClip(clip);
                 if (image != null) {
                     g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
                 }
-                // repaint(); // Removed to prevent infinite repaint loop
             }
 
         };
@@ -113,20 +119,20 @@ public class userCard extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(view, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(title, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
         curved_Panel1Layout.setVerticalGroup(
             curved_Panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(curved_Panel1Layout.createSequentialGroup()
-                .addGap(29, 29, 29)
+                .addGap(17, 17, 17)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(title)
-                .addGap(7, 7, 7)
+                .addGap(18, 18, 18)
+                .addComponent(title, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
                 .addGroup(curved_Panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(view, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(status, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -137,7 +143,9 @@ public class userCard extends javax.swing.JPanel {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(curved_Panel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(curved_Panel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         add(jPanel1);
@@ -152,4 +160,11 @@ public class userCard extends javax.swing.JPanel {
     private javax.swing.JLabel title;
     private javax.swing.JLabel view;
     // End of variables declaration//GEN-END:variables
+
+    /**
+     * @return the user
+     */
+    public User getUser() {
+        return user;
+    }
 }

@@ -138,15 +138,7 @@ public class Main extends javax.swing.JFrame {
                         }
                     }
                 });
-
-                // Debug Purposes
-                System.out.println("GLOBAL MOVIE CALCULATIONS:");
-                for (String title : uniqueRatings.keySet()) {
-                    System.out.println("Movie: " + title + 
-                                      ", Unique ratings: " + uniqueRatings.get(title) + 
-                                      ", Total score: " + totalScores.get(title));
-                }
-
+                
                 //Updates the Global List for display
                 for (int i = 0; i < newMovieList.length; i++) {
                     Movie oldMovie = oldList[i];
@@ -165,16 +157,13 @@ public class Main extends javax.swing.JFrame {
                     copy.setDisplayRated(ratingCount); 
 
                     newMovieList[i] = copy;
-                    
-                    System.out.println("Global movie updated: " + movieTitle + 
-                                      ", Score: " + avgScore + 
-                                      ", Times rated: " + ratingCount);
+
                 }
                 newMovieList = QuickSort.sort(newMovieList, false, false, true);
 
                 setMovies(newMovieList);
                 landingPage1.refreshMovies(this.movies);
-                System.out.println("List Updated");
+
                 SwingUtilities.updateComponentTreeUI(jPanel4);
             });
 
