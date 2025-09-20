@@ -80,7 +80,6 @@ public class RatePopup extends javax.swing.JPanel {
     private void submitbtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitbtn1ActionPerformed
         // TODO add your handling code here:
         int star = starRating1.getStar();
-        System.out.println("submitted: " + star);
         
         if (event != null){
          event.selected(star);

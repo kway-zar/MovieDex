@@ -47,9 +47,6 @@ public class DetailPopup extends javax.swing.JPanel implements EventStarRating {
     @Override
     public void selected(int star) {
         
-        
-        
-        System.out.println("Star received in DetailPopup: " + star);
         SwingUtilities.invokeLater(() -> {
             jLabel4.setText(star + "/5");
             
