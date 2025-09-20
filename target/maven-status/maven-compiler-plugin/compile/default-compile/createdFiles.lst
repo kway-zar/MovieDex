@@ -1,8 +1,6 @@
-com\netnet\moviedex\Main.class
 popUp\DetailPopup$1.class
 popUp\RatePopup$1.class
 com\netnet\moviedex\components\CustomMenuUI.class
-com\netnet\moviedex\components\LandingPage$6.class
 com\mycompany\star\rating\StarRating.class
 popUp\RatePopup.class
 com\netnet\moviedex\components\Main$3.class
@@ -25,7 +23,6 @@ com\netnet\moviedex\components\LoginCard$1.class
 submitbtn\Submitbtn$1.class
 com\mycompany\star\rating\StarRating$5.class
 com\netnet\moviedex\components\Main$4.class
-com\netnet\moviedex\Main$1.class
 com\netnet\moviedex\Movie.class
 com\mycompany\star\rating\EventStarRating.class
 submitbtn\Submitbtn.class
@@ -35,7 +32,6 @@ com\netnet\moviedex\components\userCard$1.class
 com\netnet\moviedex\components\LandingPage$1.class
 com\netnet\moviedex\components\Main$1.class
 com\mycompany\star\rating\StarRating$2.class
-com\netnet\moviedex\components\LandingPage$5.class
 popUp\DetailPopup.class
 popUp\UserPopup$2.class
 com\netnet\moviedex\components\LoginCard$2.class
@@ -47,9 +43,7 @@ com\netnet\moviedex\UserData.class
 com\netnet\moviedex\components\LandingPage.class
 com\netnet\moviedex\components\LandingPage$2.class
 com\netnet\moviedex\components\Login.class
-testbtn\testbtn$1.class
 com\netnet\moviedex\Movie$MovieGenre.class
-testbtn\testbtn.class
 com\netnet\moviedex\components\MovieCard$1.class
 popUp\DetailPopup$4.class
 com\mycompany\star\rating\StarRating$3.class

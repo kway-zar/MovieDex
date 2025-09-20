@@ -13,10 +13,12 @@ import com.netnet.moviedex.UserData;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.imageio.ImageIO;
@@ -38,49 +40,59 @@ public class Main extends javax.swing.JFrame {
     private BufferedImage image;
 
     public Main() {
+        setTitle("MovieDex");
+        try {
+                
+                Image icon = ImageIO.read(getClass().getResource("/programIcon.png")); 
+                setIconImage(icon);
+            } catch (IOException e) {
+                e.printStackTrace();
+                
+            }
+
         initComponents();
 
         this.movies = new Movie[]{
             new Movie("1917", "/movieCover/1917.jpg", 0, MovieStatus.UNRATED,
-            new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
+            new Movie.MovieGenre[]{Movie.MovieGenre.ACTION, Movie.MovieGenre.DRAMA, Movie.MovieGenre.WAR}),
             new Movie("Interstellar", "/movieCover/interstellar.jpg", 0, MovieStatus.UNRATED,
-            new Movie.MovieGenre[]{Movie.MovieGenre.SCI_FI}),
-            new Movie("1986", "", 0, MovieStatus.UNRATED,
-            new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
-            new Movie("1987", "", 0, MovieStatus.UNRATED,
-            new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
-            new Movie("1988", "", 0, MovieStatus.UNRATED,
-            new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
-            new Movie("1989", "", 0, MovieStatus.UNRATED,
-            new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
-            new Movie("1990", "", 0, MovieStatus.UNRATED,
-            new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
-            new Movie("1991", "", 0, MovieStatus.UNRATED,
-            new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
-            new Movie("1992", "", 0, MovieStatus.UNRATED,
-            new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
-            new Movie("1993", "", 0, MovieStatus.UNRATED,
-            new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
-            new Movie("1994", "", 0, MovieStatus.UNRATED,
-            new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
-            new Movie("1984", "", 0, MovieStatus.UNRATED,
-            new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
-            new Movie("1985", "", 0, MovieStatus.UNRATED,
-            new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
-            new Movie("1986", "", 0, MovieStatus.UNRATED,
-            new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
-            new Movie("1987", "", 0, MovieStatus.UNRATED,
-            new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
-            new Movie("1988", "", 0, MovieStatus.UNRATED,
-            new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
-            new Movie("1989", "", 0, MovieStatus.UNRATED,
-            new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
-            new Movie("1990", "", 0, MovieStatus.UNRATED,
-            new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
-            new Movie("1991", "", 0, MovieStatus.UNRATED,
-            new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),
-            new Movie("1992", "", 0, MovieStatus.UNRATED,
-            new Movie.MovieGenre[]{Movie.MovieGenre.ACTION}),};
+            new Movie.MovieGenre[]{Movie.MovieGenre.SCI_FI, Movie.MovieGenre.ADVENTURE, Movie.MovieGenre.DRAMA}),
+            new Movie("Boyz n the Hood", "/movieCover/boyznthehood.png", 0, MovieStatus.UNRATED,
+            new Movie.MovieGenre[]{Movie.MovieGenre.ACTION, Movie.MovieGenre.DRAMA}),
+            new Movie("The Pianist", "/movieCover/thePianist.png", 0, MovieStatus.UNRATED,
+            new Movie.MovieGenre[]{Movie.MovieGenre.DRAMA, Movie.MovieGenre.WAR}),
+            new Movie("Spider-Man: Across the Spider-Verse", "/movieCover/spider-man_across the spider-verse.jpg", 0, MovieStatus.UNRATED,
+            new Movie.MovieGenre[]{Movie.MovieGenre.ACTION,Movie.MovieGenre.SUPERHERO,Movie.MovieGenre.ADVENTURE}),
+            new Movie("Inception", "/movieCover/inception.jpg", 0, MovieStatus.UNRATED,
+            new Movie.MovieGenre[]{Movie.MovieGenre.ACTION,Movie.MovieGenre.SCI_FI, Movie.MovieGenre.ADVENTURE,Movie.MovieGenre.THRILLER}),
+            new Movie("The Prestige", "/movieCover/the prestige.jpg", 0, MovieStatus.UNRATED,
+            new Movie.MovieGenre[]{Movie.MovieGenre.DRAMA,Movie.MovieGenre.SCI_FI,Movie.MovieGenre.THRILLER}),
+            new Movie("All Quiet on the Western Front", "/movieCover/all quiet on the western front.jpg", 0, MovieStatus.UNRATED,
+            new Movie.MovieGenre[]{Movie.MovieGenre.ACTION, Movie.MovieGenre.WAR, Movie.MovieGenre.DRAMA}),
+            new Movie("Home Alone", "/movieCover/home alone.jpg", 0, MovieStatus.UNRATED,
+            new Movie.MovieGenre[]{Movie.MovieGenre.COMEDY}),
+            new Movie("How to train your Dragon", "/movieCover/httyd.jpg", 0, MovieStatus.UNRATED,
+            new Movie.MovieGenre[]{Movie.MovieGenre.ACTION,Movie.MovieGenre.ADVENTURE}),
+            new Movie("Johnny English", "/movieCover/johnny english.jpg", 0, MovieStatus.UNRATED,
+            new Movie.MovieGenre[]{Movie.MovieGenre.ACTION,Movie.MovieGenre.ADVENTURE,Movie.MovieGenre.COMEDY}),
+            new Movie("Hotel Transylvania", "/movieCover/hotel transylvania.jpg", 0, MovieStatus.UNRATED,
+            new Movie.MovieGenre[]{Movie.MovieGenre.COMEDY}),
+            new Movie("The Wolf of Wall Street", "/movieCover/the wolf of wall street.jpg", 0, MovieStatus.UNRATED,
+            new Movie.MovieGenre[]{Movie.MovieGenre.COMEDY, Movie.MovieGenre.DRAMA}),
+            new Movie("Blade Runner 2049", "/movieCover/blade runner 2049.jpg", 0, MovieStatus.UNRATED,
+            new Movie.MovieGenre[]{Movie.MovieGenre.ACTION,Movie.MovieGenre.SCI_FI, Movie.MovieGenre.THRILLER,Movie.MovieGenre.DRAMA}),
+            new Movie("The Truman Show", "/movieCover/the truman show.jpg", 0, MovieStatus.UNRATED,
+            new Movie.MovieGenre[]{Movie.MovieGenre.COMEDY,Movie.MovieGenre.DRAMA}),
+            new Movie("La La Land", "/movieCover/la la land.jpg", 0, MovieStatus.UNRATED,
+            new Movie.MovieGenre[]{Movie.MovieGenre.DRAMA, Movie.MovieGenre.ROMANCE, Movie.MovieGenre.COMEDY}),
+            new Movie("Dunkirk", "/movieCover/dunkirk.jpg", 0, MovieStatus.UNRATED,
+            new Movie.MovieGenre[]{Movie.MovieGenre.ACTION, Movie.MovieGenre.WAR}),
+            new Movie("Dungeons & Dragons: Honour Among Thieves", "/movieCover/Dungeons & Dragons_Honour Among Thieves.jpg", 0, MovieStatus.UNRATED,
+            new Movie.MovieGenre[]{Movie.MovieGenre.ACTION,Movie.MovieGenre.ADVENTURE, Movie.MovieGenre.COMEDY}),
+            new Movie("Star Wars: Episode III", "/movieCover/Star Wars_Episode III.jpg", 0, MovieStatus.UNRATED,
+            new Movie.MovieGenre[]{Movie.MovieGenre.ACTION, Movie.MovieGenre.SCI_FI}),
+            new Movie("Gravity", "/movieCover/gravity.jpg", 0, MovieStatus.UNRATED,
+            new Movie.MovieGenre[]{Movie.MovieGenre.THRILLER, Movie.MovieGenre.SCI_FI}),};
         //movies = QuickSort.sort(movies, false, false, false);
 
         this.users = new User[]{

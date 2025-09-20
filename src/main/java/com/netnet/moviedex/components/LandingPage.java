@@ -7,6 +7,7 @@ package com.netnet.moviedex.components;
 import com.netnet.moviedex.Movie;
 import com.netnet.moviedex.QuickSort;
 import com.netnet.moviedex.UserData;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -15,9 +16,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Map;
+import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JDialog;
+import javax.swing.JProgressBar;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import popUp.DetailPopup;
 import popUp.UserPopup;
 
@@ -32,6 +37,8 @@ public class LandingPage extends javax.swing.JPanel {
      */
     private Movie[] displayList;
     boolean isMovieTab = true;
+    private JDialog loadingDialog;
+    private JProgressBar progressBar;
     private Main parent;
     private UserData user;
 
@@ -42,65 +49,100 @@ public class LandingPage extends javax.swing.JPanel {
     }
 
     public LandingPage(UserData user, Main parent) {
+        UIManager.put("ScrollBar.track", new Color(26, 26, 29));
         this.parent = parent;
         this.user = user;
         this.displayList = user.getMovies();
         String defaultSort = "Popular";
         setOpaque(false);
-
         initComponents();
+        LoadingDialogBox(parent);
 
-        sortType.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String preferredSorting = (String) sortType.getSelectedItem();
+        showLoadingDialog();
+        new Thread(() -> {
+            try {
 
-                if (isMovieTab) {
-                    // Movie tab sorting
-                    String preferredGenre = (String) genre.getSelectedItem();
-                    ArrayList<Integer> indexes = similarity(displayList, preferredGenre);
-                    filterGenre(indexes);
-                    sortCard(preferredSorting);
-                } else {
-                    // User tab sorting
-                    sortUserCards(preferredSorting);
-                }
+                viewType(isMovieTab, user);
+                sortCard(defaultSort);
+                jScrollPane1.setViewportView(jPanel1);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        });
+            hideLoadingDialog();
+        }).start();
 
-        genre.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String preferredGenre = (String) genre.getSelectedItem();
-                String preferredSorting = (String) sortType.getSelectedItem();
+        sortType.addActionListener((ActionEvent e) -> {
+            showLoadingDialog();
+            new Thread(() -> {
+                try {
+                    String preferredSorting = (String) sortType.getSelectedItem();
 
-                setDisplayList(user.getMovies());
-
-
-                switch (preferredGenre) {
-                    case "All", "Action", "Drama", "Romance" -> {
+                    if (isMovieTab) {
+                        // Movie tab sorting
+                        String preferredGenre = (String) genre.getSelectedItem();
                         ArrayList<Integer> indexes = similarity(displayList, preferredGenre);
                         filterGenre(indexes);
+                        sortCard(preferredSorting);
+                    } else {
+                        // User tab sorting
+                        
+                        sortUserCards(preferredSorting);
                     }
-                    case "Sci-fi" -> {
-                        ArrayList<Integer> indexes = similarity(displayList, "sci_fi");
-                        filterGenre(indexes);
-                    }
-
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
+                hideLoadingDialog();
+            }).start();
+        });
 
-                sortCard(preferredSorting);
+        genre.addActionListener((ActionEvent e) -> {
+            showLoadingDialog();
+            new Thread(() -> {
+                try {
+                    String preferredGenre = (String) genre.getSelectedItem();
+                    String preferredSorting = (String) sortType.getSelectedItem();
 
-            }
+                    setDisplayList(user.getMovies());
 
+                    switch (preferredGenre) {
+                        default -> {
+                            ArrayList<Integer> indexes = similarity(displayList, preferredGenre);
+                            filterGenre(indexes);
+                        }
+                        case "SCI-FI" -> {
+                            ArrayList<Integer> indexes = similarity(displayList, "sci_fi");
+                            filterGenre(indexes);
+                        }
+
+                    }
+
+                    sortCard(preferredSorting);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                hideLoadingDialog();
+            }).start();
         });
 
         UserLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 if (SwingUtilities.isLeftMouseButton(e)) {
-                    isMovieTab = false;
-                    viewType(isMovieTab, user);
+                    showLoadingDialog();
+
+                    new Thread(() -> {
+                        try {
+                            isMovieTab = false;
+                            jPanel3.setVisible(false);
+                            viewType(isMovieTab, user);
+                            
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                        hideLoadingDialog();
+                        jPanel3.setVisible(true);
+                    }).start();
+
                 }
             }
 
@@ -109,20 +151,56 @@ public class LandingPage extends javax.swing.JPanel {
             @Override
             public void mousePressed(MouseEvent e) {
                 if (SwingUtilities.isLeftMouseButton(e)) {
-                    isMovieTab = true;
-                    viewType(isMovieTab, user);
-                    String[] type = {"Popular", "Highest", "Lowest"};
-                    DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(type);
-                    sortType.setModel(model);
+                    showLoadingDialog();
+
+                    new Thread(() -> {
+                        try {
+                            isMovieTab = true;
+                            viewType(isMovieTab, user);
+                            String[] type = {"Popular", "Highest", "Lowest"};
+                            DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(type);
+                            sortType.setModel(model);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                        hideLoadingDialog();
+                    }).start();
                 }
             }
 
         });
 
-        viewType(isMovieTab, user);
-        sortCard(defaultSort);
-        jScrollPane1.setViewportView(jPanel1);
+    }
 
+    public void LoadingDialogBox(Main parentFrame) {
+
+        loadingDialog = new JDialog(parentFrame, "Loading...", true);
+        loadingDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+        loadingDialog.setSize(300, 100);
+        loadingDialog.setLocationRelativeTo(parentFrame);
+
+        javax.swing.JPanel panel = new javax.swing.JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        javax.swing.JLabel messageLabel = new javax.swing.JLabel("Please wait while data is loading...");
+        messageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        panel.add(messageLabel, BorderLayout.NORTH);
+
+        progressBar = new JProgressBar();
+        progressBar.setIndeterminate(true);
+        panel.add(progressBar, BorderLayout.CENTER);
+
+        loadingDialog.add(panel);
+    }
+
+    public void showLoadingDialog() {
+
+        SwingUtilities.invokeLater(() -> loadingDialog.setVisible(true));
+    }
+
+    public void hideLoadingDialog() {
+
+        SwingUtilities.invokeLater(() -> loadingDialog.dispose());
     }
 
     /*
@@ -133,9 +211,7 @@ public class LandingPage extends javax.swing.JPanel {
         this.user = user;
         displayList = QuickSort.sort(user.getMovies(), false, false, false);
 
-
-
-        if (isMovieTab == true) {
+        if (isMovieTab) {
 
             UserLabel.setForeground(Color.WHITE);
             MovieLabel.setForeground(Color.decode("#950740"));
@@ -165,8 +241,9 @@ public class LandingPage extends javax.swing.JPanel {
 
             }
 
-            jPanel1.setLayout(new GridLayout(4, 5, 10, 10));
+            jPanel1.setLayout(new GridLayout(4, 5, 5, 10));
             renderCard(movieList);
+            
         } else {
 
             UserLabel.setForeground(Color.decode("#950740"));
@@ -187,9 +264,10 @@ public class LandingPage extends javax.swing.JPanel {
     }
 
     private void sortUserCards(String sort) {
+
         userCard[] usersList = new userCard[4];
         int i = 0;
-
+        jPanel3.setVisible(false);
         for (Map.Entry<String, UserData> entry : parent.getMap().entrySet()) {
             usersList[i] = new userCard(entry.getValue());
             usersList[i].getCard().addMouseListener(new MouseAdapter() {
@@ -208,8 +286,7 @@ public class LandingPage extends javax.swing.JPanel {
                     userPopup.addPropertyChangeListener("closePanel", evt -> {
                         parent.setEnabled(true);
                         dialog.dispose();
-                        
-                        
+
                     });
                 }
 
@@ -232,6 +309,7 @@ public class LandingPage extends javax.swing.JPanel {
             }
 
         } else {
+            
             for (i = 0; i < usersList.length; i++) {
                 int j = i;
 
@@ -250,10 +328,11 @@ public class LandingPage extends javax.swing.JPanel {
 
                 i++;
             }
+            
 
         }
-
-        renderCard(usersList);
+        jPanel3.setVisible(true);
+        renderUserCard(usersList);
 
     }
 
@@ -270,8 +349,8 @@ public class LandingPage extends javax.swing.JPanel {
             setDisplayList(user.getMovies());
 
             String genreForFilter = preferredGenre;
-            if ("Sci-fi".equals(preferredGenre)) {
-                genreForFilter = "sci_fi";
+            if ("SCI-FI".equals(preferredGenre)) {
+                genreForFilter = "SCI_FI";
             }
 
             ArrayList<Integer> indexes = similarity(displayList, genreForFilter);
@@ -291,7 +370,7 @@ public class LandingPage extends javax.swing.JPanel {
     private void refreshMovieCardsWithInteractions() {
         MovieCard[] movieList = new MovieCard[displayList.length];
         Movie[] globalMovies = parent.getMovies();
-        
+
         for (int i = 0; i < displayList.length; i++) {
 
             Movie movieWithGlobalScore = new Movie(displayList[i]);
@@ -304,7 +383,7 @@ public class LandingPage extends javax.swing.JPanel {
 
                 double globalScore = globalMovie.getScore();
                 int globalTimesRated = globalMovie.getTimesRated();
-                
+
                 movieWithGlobalScore.setScore(globalScore);
                 movieWithGlobalScore.setDisplayRated(globalTimesRated);
             }
@@ -346,14 +425,11 @@ public class LandingPage extends javax.swing.JPanel {
                     boolean isFirstTimeRating = userMovie.getMovieStatus() == Movie.MovieStatus.UNRATED;
                     double previousUserRating = userMovie.getScore(); // 0 if UNRATED initially
 
-                    
-
                     if (isFirstTimeRating) {
 
                         user.getUser().INCREASE_RATING_COUNT();
                         userMovie.setTimesRated();
                         userMovie.setStatus(Movie.MovieStatus.RATED);
-
 
                     }
 
@@ -389,7 +465,7 @@ public class LandingPage extends javax.swing.JPanel {
         Movie[] globalMovies = parent.getMovies();
         for (Movie globalMovie : globalMovies) {
             if (globalMovie.getTitle().equals(ratedMovie.getTitle())) {
-                
+
                 if (isFirstTimeRating == true) {
 
                     double currentScore = globalMovie.getScore();
@@ -415,7 +491,6 @@ public class LandingPage extends javax.swing.JPanel {
 
                     globalMovie.setScore(newAverage);
 
-
                 }
                 break;
             }
@@ -439,6 +514,7 @@ public class LandingPage extends javax.swing.JPanel {
         this.displayList = filteredMovies;
 
         renderCard(movieList);
+
         jScrollPane1.getVerticalScrollBar().setValue(0);
 
     }
@@ -448,7 +524,6 @@ public class LandingPage extends javax.swing.JPanel {
 
         Movie[] tempDisplay = new Movie[displayList.length];
         Movie[] globalMovies = parent.getMovies();
-
 
         for (int i = 0; i < displayList.length; i++) {
             tempDisplay[i] = new Movie(displayList[i]);
@@ -496,7 +571,9 @@ public class LandingPage extends javax.swing.JPanel {
 
     public void renderCard(MovieCard[] list) {
         Main parent = this.parent;
-
+        int rows = (list.length <= 12) ? 0 : 4;
+        //int cols = (list.length < =)
+        jPanel1.setLayout(new GridLayout(rows, 5, 10, 10));
         if (jPanel1.getComponentCount() >= 1) {
             jPanel1.removeAll();
 
@@ -506,6 +583,8 @@ public class LandingPage extends javax.swing.JPanel {
 
             jPanel1.add(card);
         }
+
+        parent.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
         revalidate();
         repaint();
     }
@@ -521,7 +600,7 @@ public class LandingPage extends javax.swing.JPanel {
         repaint();
     }
 
-    public void renderCard(userCard[] list) {
+    public void renderUserCard(userCard[] list) {
 
         jPanel1.removeAll();
         for (userCard card : list) {
@@ -540,7 +619,6 @@ public class LandingPage extends javax.swing.JPanel {
         Movie[] globalMovies = parent.getMovies();
         int k = 0;
 
-
         for (int i : indexes) {
             Movie userMovie = displayList[i];
 
@@ -552,7 +630,6 @@ public class LandingPage extends javax.swing.JPanel {
 
                 movieCopy.setScore(globalMovie.getScore());
                 movieCopy.setDisplayRated(globalMovie.getTimesRated());
-
 
             }
 
@@ -640,6 +717,7 @@ public class LandingPage extends javax.swing.JPanel {
         jScrollPane1.setBorder(null);
         jScrollPane1.setForeground(new java.awt.Color(26, 26, 29));
         jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane1.setOpaque(false);
 
         jPanel1.setBackground(new java.awt.Color(26, 26, 29));
 
@@ -699,7 +777,7 @@ public class LandingPage extends javax.swing.JPanel {
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Genre");
 
-        genre.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All", "Action", "Sci-fi", "Romance", "Drama" }));
+        genre.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ALL", "ACTION", "ADVENTURE", "COMEDY", "DRAMA", "ROMANCE", "SCI-FI", "SUPERHERO", "THRILLER", "WAR" }));
         genre.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N

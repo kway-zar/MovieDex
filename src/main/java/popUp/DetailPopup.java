@@ -6,6 +6,7 @@ import javax.swing.JDialog;
 import javax.swing.SwingUtilities;
 import com.mycompany.star.rating.EventStarRating;
 import com.netnet.moviedex.Movie;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
@@ -37,6 +38,10 @@ public class DetailPopup extends javax.swing.JPanel implements EventStarRating {
             image = ImageIO.read(getClass().getResource(m.getCoverLink()));
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        if(m.getTitle().length() > 8) {
+            Font newFont = new Font(jLabel2.getFont().getName(), jLabel2.getFont().getStyle(), 48 - (m.getTitle().length() - 5));
+            jLabel2.setFont(newFont);
         }
         jLabel2.setText(m.getTitle());
         // Show the movie's global score for consistency
@@ -114,9 +119,9 @@ public class DetailPopup extends javax.swing.JPanel implements EventStarRating {
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 48)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel2.setText("Movie Title");
-        jLayeredPane1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(257, 0, -1, 51));
+        jLayeredPane1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(257, 0, 290, 51));
 
         ratebtn1.setBackground(new java.awt.Color(255, 255, 255));
         ratebtn1.setText("RATE");

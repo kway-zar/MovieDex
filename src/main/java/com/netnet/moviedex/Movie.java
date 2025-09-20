@@ -4,6 +4,8 @@
  */
 package com.netnet.moviedex;
 
+import java.sql.Wrapper;
+
 /**
  *
  * @author quasar
@@ -69,7 +71,13 @@ public class Movie {
     public enum MovieGenre {
         SCI_FI,
         ROMANCE,
-        ACTION
+        ACTION,
+        DRAMA,
+        ADVENTURE,
+        WAR,
+        SUPERHERO,
+        THRILLER,
+        COMEDY
     }
 
     public enum MovieStatus {
