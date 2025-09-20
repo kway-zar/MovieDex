@@ -1,4 +1,4 @@
-package test;
+package popUp;
 
 import java.awt.Dialog;
 import java.awt.Window;

@@ -31,7 +31,7 @@ public class MovieCard extends javax.swing.JPanel {
         setOpaque(false);
 
         this.movie = m;
-
+        
         try {
             image = ImageIO.read(getClass().getResource(m.getCoverLink()));
         } catch (Exception e) {
@@ -39,6 +39,8 @@ public class MovieCard extends javax.swing.JPanel {
         }
 
         initComponents();
+        curved_Panel1.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.HAND_CURSOR));
+        
         title.setText(m.getTitle());
         score.setText(Double.toString(m.getScore()));
         // Use getDisplayRated for the view counter to show global rating count
@@ -52,6 +54,9 @@ public class MovieCard extends javax.swing.JPanel {
 
     public void setDisplayTimesRates(int i) {
         view.setText(Integer.toString(i));
+    }
+    public javax.swing.JPanel getCard() {
+        return curved_Panel1;
     }
 
     public Movie getMovie() {
@@ -85,7 +90,7 @@ public class MovieCard extends javax.swing.JPanel {
         };
         view = new javax.swing.JLabel();
 
-        setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         title.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         title.setForeground(new java.awt.Color(255, 255, 255));

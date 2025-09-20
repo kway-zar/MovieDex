@@ -18,7 +18,7 @@ import java.util.Map;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JDialog;
 import javax.swing.SwingUtilities;
-import test.DetailPopup;
+import popUp.DetailPopup;
 
 /**
  *
@@ -303,7 +303,7 @@ public class LandingPage extends javax.swing.JPanel {
     }
 
     public void addInteraction(MovieCard m, int j) {
-        m.addMouseListener(new MouseAdapter() {
+        m.getCard().addMouseListener(new MouseAdapter() {
 
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -654,7 +654,6 @@ public class LandingPage extends javax.swing.JPanel {
         jScrollPane1.setBorder(null);
         jScrollPane1.setForeground(new java.awt.Color(26, 26, 29));
         jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         jPanel1.setBackground(new java.awt.Color(26, 26, 29));
 
@@ -662,7 +661,7 @@ public class LandingPage extends javax.swing.JPanel {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 2813, Short.MAX_VALUE)
+            .addGap(0, 2823, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

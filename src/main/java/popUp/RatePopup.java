@@ -1,4 +1,4 @@
-package test;
+package popUp;
 
 import com.mycompany.star.rating.EventStarRating;
 import java.awt.Color;
