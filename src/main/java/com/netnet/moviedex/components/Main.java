@@ -59,7 +59,7 @@ public class Main extends javax.swing.JFrame {
             new Movie.MovieGenre[]{Movie.MovieGenre.SCI_FI, Movie.MovieGenre.ADVENTURE, Movie.MovieGenre.DRAMA}),
             new Movie("Boyz n the Hood", "/movieCover/boyznthehood.png", 0, MovieStatus.UNRATED,
             new Movie.MovieGenre[]{Movie.MovieGenre.ACTION, Movie.MovieGenre.DRAMA}),
-            new Movie("The Pianist", "/movieCover/thePianist.png", 0, MovieStatus.UNRATED,
+            new Movie("The Pianist", "/movieCover/thepianist.png", 0, MovieStatus.UNRATED,
             new Movie.MovieGenre[]{Movie.MovieGenre.DRAMA, Movie.MovieGenre.WAR}),
             new Movie("Spider-Man: Across the Spider-Verse", "/movieCover/spider-man_across the spider-verse.jpg", 0, MovieStatus.UNRATED,
             new Movie.MovieGenre[]{Movie.MovieGenre.ACTION,Movie.MovieGenre.SUPERHERO,Movie.MovieGenre.ADVENTURE}),

@@ -15,7 +15,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Map;
+import java.util.PriorityQueue;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JDialog;
@@ -85,7 +88,7 @@ public class LandingPage extends javax.swing.JPanel {
                         sortCard(preferredSorting);
                     } else {
                         // User tab sorting
-                        
+
                         sortUserCards(preferredSorting);
                     }
                 } catch (Exception ex) {
@@ -135,7 +138,7 @@ public class LandingPage extends javax.swing.JPanel {
                             isMovieTab = false;
                             jPanel3.setVisible(false);
                             viewType(isMovieTab, user);
-                            
+
                         } catch (Exception ex) {
                             ex.printStackTrace();
                         }
@@ -213,54 +216,62 @@ public class LandingPage extends javax.swing.JPanel {
 
         if (isMovieTab) {
 
-            UserLabel.setForeground(Color.WHITE);
-            MovieLabel.setForeground(Color.decode("#950740"));
-            genre.setVisible(true);
-            jLabel2.setVisible(true);
-
-            MovieCard[] movieList = new MovieCard[user.getMovies().length];
-
-            Movie[] globalList = QuickSort.sort(parent.getMovies(), false, false, true);
-
-            for (int i = 0; i < user.getMovies().length; i++) {
-
-                final int j = i;
-
-                Movie globalMovie = findMovieInGlobalList(displayList[i].getTitle(), globalList);
-
-                Movie movieWithGlobalScore = new Movie(displayList[i]);
-                if (globalMovie != null) {
-                    movieWithGlobalScore.setScore(globalMovie.getScore());
-                    movieWithGlobalScore.setDisplayRated(globalMovie.getTimesRated());
-
-                    movieWithGlobalScore.setStatus(displayList[i].getMovieStatus());
-                }
-
-                movieList[i] = new MovieCard(movieWithGlobalScore);
-                addInteraction(movieList[i], i);
-
-            }
-
-            jPanel1.setLayout(new GridLayout(4, 5, 5, 10));
-            renderCard(movieList);
-            
+            showMovieTab();
         } else {
 
-            UserLabel.setForeground(Color.decode("#950740"));
-            MovieLabel.setForeground(Color.WHITE);
-            genre.setVisible(false);
-            jLabel2.setVisible(false);
-
-            String[] type = {"Highest", "Lowest"};
-            DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(type);
-            sortType.setModel(model);
-
-            sortUserCards(sortType.getSelectedItem().toString());
-
-            jPanel1.setLayout(new GridLayout(0, 5, 10, 10));
-
+            showUserTab();
         }
         SwingUtilities.updateComponentTreeUI(jPanel1);
+    }
+
+    private void showUserTab() {
+        UserLabel.setForeground(Color.decode("#950740"));
+        MovieLabel.setForeground(Color.WHITE);
+        genre.setVisible(false);
+        jLabel2.setVisible(false);
+
+        String[] type = {"Highest", "Lowest"};
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(type);
+        sortType.setModel(model);
+
+        sortUserCards(sortType.getSelectedItem().toString());
+
+        jPanel1.setLayout(new GridLayout(0, 5, 10, 10));
+
+    }
+
+    private void showMovieTab() {
+        UserLabel.setForeground(Color.WHITE);
+        MovieLabel.setForeground(Color.decode("#950740"));
+        genre.setVisible(true);
+        jLabel2.setVisible(true);
+
+        MovieCard[] movieList = new MovieCard[user.getMovies().length];
+
+        Movie[] globalList = QuickSort.sort(parent.getMovies(), false, false, true);
+
+        for (int i = 0; i < user.getMovies().length; i++) {
+
+            final int j = i;
+
+            Movie globalMovie = findMovieInGlobalList(displayList[i].getTitle(), globalList);
+
+            Movie movieWithGlobalScore = new Movie(displayList[i]);
+            if (globalMovie != null) {
+                movieWithGlobalScore.setScore(globalMovie.getScore());
+                movieWithGlobalScore.setDisplayRated(globalMovie.getTimesRated());
+
+                movieWithGlobalScore.setStatus(displayList[i].getMovieStatus());
+            }
+
+            movieList[i] = new MovieCard(movieWithGlobalScore);
+            addInteraction(movieList[i], i);
+
+        }
+
+        jPanel1.setLayout(new GridLayout(4, 5, 5, 10));
+        renderCard(movieList);
+
     }
 
     private void sortUserCards(String sort) {
@@ -309,7 +320,7 @@ public class LandingPage extends javax.swing.JPanel {
             }
 
         } else {
-            
+
             for (i = 0; i < usersList.length; i++) {
                 int j = i;
 
@@ -328,7 +339,6 @@ public class LandingPage extends javax.swing.JPanel {
 
                 i++;
             }
-            
 
         }
         jPanel3.setVisible(true);
@@ -417,31 +427,41 @@ public class LandingPage extends javax.swing.JPanel {
                     dialog.dispose();
                 });
                 detailPopup.addPropertyChangeListener("rating", evt -> {
-                    detailPopup.closePanel(true);
-                    double newUserRating = (double) evt.getNewValue();
+                    showLoadingDialog();
 
-                    Movie userMovie = displayList[j];
+                    new Thread(() -> {
+                        try {
 
-                    boolean isFirstTimeRating = userMovie.getMovieStatus() == Movie.MovieStatus.UNRATED;
-                    double previousUserRating = userMovie.getScore(); // 0 if UNRATED initially
+                            detailPopup.closePanel(true);
+                            double newUserRating = (double) evt.getNewValue();
 
-                    if (isFirstTimeRating) {
+                            Movie userMovie = displayList[j];
 
-                        user.getUser().INCREASE_RATING_COUNT();
-                        userMovie.setTimesRated();
-                        userMovie.setStatus(Movie.MovieStatus.RATED);
+                            boolean isFirstTimeRating = userMovie.getMovieStatus() == Movie.MovieStatus.UNRATED;
+                            double previousUserRating = userMovie.getScore();
 
-                    }
+                            if (isFirstTimeRating) {
 
-                    userMovie.setScore(newUserRating);
+                                user.getUser().INCREASE_RATING_COUNT();
+                                userMovie.setTimesRated();
+                                userMovie.setStatus(Movie.MovieStatus.RATED);
 
-                    updateGlobalMovies(userMovie, previousUserRating, newUserRating, isFirstTimeRating);
+                            }
 
-                    user.setMovies(displayList);
-                    setDisplayList(user.getMovies());
-                    firePropertyChange("userData", null, user);
+                            userMovie.setScore(newUserRating);
 
-                    refreshDisplayAfterRating();
+                            updateGlobalMovies(userMovie, previousUserRating, newUserRating, isFirstTimeRating);
+
+                            user.setMovies(displayList);
+                            setDisplayList(user.getMovies());
+                            firePropertyChange("userData", null, user);
+
+                            refreshDisplayAfterRating();
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                        hideLoadingDialog();
+                    }).start();
                 });
             }
 
@@ -540,12 +560,22 @@ public class LandingPage extends javax.swing.JPanel {
             tempDisplay[i].setStatus(userStatus);
         }
 
-        if (preferredSorting.equals("Popular")) {
-            tempDisplay = QuickSort.sort(tempDisplay, false, false, false);
-        } else if (preferredSorting.equals("Highest")) {
-            tempDisplay = QuickSort.sort(tempDisplay, true, false, false);
-        } else if (preferredSorting.equals("Lowest")) {
-            tempDisplay = QuickSort.sort(tempDisplay, true, true, false);
+        switch (preferredSorting) {
+            case "Popular" -> {
+                PriorityQueue<Movie> maxHeap = new PriorityQueue<>((m1, m2) -> Integer.compare(m1.getTimesRated(), m2.getTimesRated()));
+                maxHeap.addAll(Arrays.asList(tempDisplay));
+                int i = tempDisplay.length - 1;
+                while (!maxHeap.isEmpty()) {
+                    Movie m = maxHeap.poll();
+                    tempDisplay[i] = m;
+                    i--;
+                }
+                //tempDisplay = QuickSort.sort(tempDisplay, false, false, false);
+            }
+            case "Highest" -> tempDisplay = QuickSort.sort(tempDisplay, true, false, false);
+            case "Lowest" -> tempDisplay = QuickSort.sort(tempDisplay, true, true, false);
+            default -> {
+            }
         }
 
         MovieCard[] movieList = new MovieCard[tempDisplay.length];
