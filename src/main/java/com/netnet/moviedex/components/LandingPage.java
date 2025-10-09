@@ -84,7 +84,8 @@ public class LandingPage extends javax.swing.JPanel {
                     if (isMovieTab) {
                         // Movie tab sorting
                         String preferredGenre = (String) genre.getSelectedItem();
-                        ArrayList<Integer> indexes = similarity(displayList, preferredGenre);
+                        String genreSelected = (preferredGenre.equals("SCI-FI")) ? "sci_fi": preferredGenre;
+                        ArrayList<Integer> indexes = similarity(displayList, genreSelected);
                         filterGenre(indexes);
                         sortCard(preferredSorting);
                     } else {
@@ -97,6 +98,8 @@ public class LandingPage extends javax.swing.JPanel {
                 }
                 hideLoadingDialog();
             }).start();
+            revalidate();
+            repaint();
         });
 
         genre.addActionListener((ActionEvent e) -> {
@@ -451,7 +454,7 @@ public class LandingPage extends javax.swing.JPanel {
 
                             updateGlobalMovies(userMovie, previousUserRating, newUserRating, isFirstTimeRating);
                             
-                            Movie[] tempList = parent.getMovies();
+                            Movie[] tempList = user.getMovies();
                             for(int i = 0; i < tempList.length; i++) {
                                 if(tempList[i].getTitle().equals(displayList[j].getTitle())) {
                                     tempList[i] = displayList[j];
@@ -686,9 +689,6 @@ public class LandingPage extends javax.swing.JPanel {
         
         
         if (m != null) {
-            if(genre.equalsIgnoreCase("ALL")) {
-                m = user.getMovies();
-            }
             for (int i = 0; i < m.length; i++) {
                 if (genre.equalsIgnoreCase("All")) {
                     
