@@ -10,11 +10,9 @@ import com.netnet.moviedex.Movie.MovieStatus;
 import com.netnet.moviedex.QuickSort;
 import com.netnet.moviedex.User;
 import com.netnet.moviedex.UserData;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -163,7 +161,7 @@ public class Main extends javax.swing.JFrame {
                     double totalScore = totalScores.getOrDefault(movieTitle, 0.0);
                     int ratingCount = uniqueRatings.getOrDefault(movieTitle, 0);
                     
-                    double avgScore = ratingCount > 0 ? totalScore / ratingCount : 0.0;
+                    double avgScore = Math.round((ratingCount > 0 ? totalScore / ratingCount : 0.0) * 100.0) / 100.0;
                     
                     copy.setScore(avgScore);
                     copy.setDisplayRated(ratingCount); 

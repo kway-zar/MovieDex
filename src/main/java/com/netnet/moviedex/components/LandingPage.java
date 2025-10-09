@@ -4,21 +4,17 @@
  */
 package com.netnet.moviedex.components;
 
-import com.netnet.moviedex.Movie;
-import com.netnet.moviedex.QuickSort;
-import com.netnet.moviedex.UserData;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Map;
 import java.util.PriorityQueue;
+
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JDialog;
@@ -26,6 +22,11 @@ import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+
+import com.netnet.moviedex.Movie;
+import com.netnet.moviedex.QuickSort;
+import com.netnet.moviedex.UserData;
+
 import popUp.DetailPopup;
 import popUp.UserPopup;
 
@@ -100,31 +101,29 @@ public class LandingPage extends javax.swing.JPanel {
 
         genre.addActionListener((ActionEvent e) -> {
             showLoadingDialog();
+            this.displayList = user.getMovies();
             new Thread(() -> {
                 try {
                     String preferredGenre = (String) genre.getSelectedItem();
                     String preferredSorting = (String) sortType.getSelectedItem();
 
-                    setDisplayList(user.getMovies());
+                    
 
-                    switch (preferredGenre) {
-                        default -> {
-                            ArrayList<Integer> indexes = similarity(displayList, preferredGenre);
-                            filterGenre(indexes);
-                        }
-                        case "SCI-FI" -> {
-                            ArrayList<Integer> indexes = similarity(displayList, "sci_fi");
-                            filterGenre(indexes);
-                        }
-
+                    if (!"All".equalsIgnoreCase(preferredGenre)) {
+                        String genreToFilter = "SCI-FI".equals(preferredGenre) ? "SCI_FI" : preferredGenre;
+                        ArrayList<Integer> indexes = similarity(displayList, genreToFilter);
+                        filterGenre(indexes);
                     }
 
                     sortCard(preferredSorting);
+                    
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
                 hideLoadingDialog();
             }).start();
+            revalidate();
+            repaint();
         });
 
         UserLabel.addMouseListener(new MouseAdapter() {
@@ -363,7 +362,7 @@ public class LandingPage extends javax.swing.JPanel {
                 genreForFilter = "SCI_FI";
             }
 
-            ArrayList<Integer> indexes = similarity(displayList, genreForFilter);
+            ArrayList<Integer> indexes = similarity(user.getMovies(), genreForFilter);
             filterGenre(indexes);
             sortCard(preferredSorting);
 
@@ -428,7 +427,7 @@ public class LandingPage extends javax.swing.JPanel {
                 });
                 detailPopup.addPropertyChangeListener("rating", evt -> {
                     showLoadingDialog();
-
+                    
                     new Thread(() -> {
                         try {
 
@@ -451,8 +450,14 @@ public class LandingPage extends javax.swing.JPanel {
                             userMovie.setScore(newUserRating);
 
                             updateGlobalMovies(userMovie, previousUserRating, newUserRating, isFirstTimeRating);
-
-                            user.setMovies(displayList);
+                            
+                            Movie[] tempList = parent.getMovies();
+                            for(int i = 0; i < tempList.length; i++) {
+                                if(tempList[i].getTitle().equals(displayList[j].getTitle())) {
+                                    tempList[i] = displayList[j];
+                                }
+                            }
+                            user.setMovies(tempList);
                             setDisplayList(user.getMovies());
                             firePropertyChange("userData", null, user);
 
@@ -462,6 +467,7 @@ public class LandingPage extends javax.swing.JPanel {
                         }
                         hideLoadingDialog();
                     }).start();
+                    
                 });
             }
 
@@ -559,6 +565,7 @@ public class LandingPage extends javax.swing.JPanel {
 
             tempDisplay[i].setStatus(userStatus);
         }
+        
 
         switch (preferredSorting) {
             case "Popular" -> {
@@ -570,7 +577,7 @@ public class LandingPage extends javax.swing.JPanel {
                     tempDisplay[i] = m;
                     i--;
                 }
-                //tempDisplay = QuickSort.sort(tempDisplay, false, false, false);
+                
             }
             case "Highest" -> tempDisplay = QuickSort.sort(tempDisplay, true, false, false);
             case "Lowest" -> tempDisplay = QuickSort.sort(tempDisplay, true, true, false);
@@ -602,7 +609,7 @@ public class LandingPage extends javax.swing.JPanel {
     public void renderCard(MovieCard[] list) {
         Main parent = this.parent;
         int rows = (list.length <= 12) ? 0 : 4;
-        //int cols = (list.length < =)
+        
         jPanel1.setLayout(new GridLayout(rows, 5, 10, 10));
         if (jPanel1.getComponentCount() >= 1) {
             jPanel1.removeAll();
@@ -676,10 +683,15 @@ public class LandingPage extends javax.swing.JPanel {
      */
     public ArrayList<Integer> similarity(Movie[] m, String genre) {
         ArrayList<Integer> index = new ArrayList<>();
-        //m = QuickSort.sort(m, false, false, true);
+        
+        
         if (m != null) {
+            if(genre.equalsIgnoreCase("ALL")) {
+                m = user.getMovies();
+            }
             for (int i = 0; i < m.length; i++) {
                 if (genre.equalsIgnoreCase("All")) {
+                    
                     index.add(i);
 
                 } else {
